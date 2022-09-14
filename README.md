@@ -1,10 +1,10 @@
 # compta.libremen.com via docker (debian + apache + perl + PostgreSQL)
-[![GitHub release]
 
-- [Docker images](#docker-images)
-- [installer manuellement compta-libremen-com](#installer-manuellement-compta-libremen-com)
+- [Docker Images via le Hub Docker](#docker-images-via-le-hub-docker)
+- [Docker Images via Dockerfile](#docker-images-via-Dockerfile)
+- [Installation manuelle](#Installation-manuelle)
 
-## Docker Images
+## Docker Images via le Hub Docker
 
 1) Installation de Docker
 Docker est maintenant disponible sur toutes les distributions récentes. Pour l’installer sur une distribution
@@ -46,5 +46,7 @@ identifiants *(mot de passe)*
 -  PostgreSQL, Adminer: username **compta** password: **compta** dbname : **comptalibre** 
 -  comptalibremen: username **superadmin** password: **admin**
 
+## Docker Images via Dockerfile
 
-## installer manuellement compta-libremen-com
+
+## Installation manuelle
