@@ -39,7 +39,7 @@ docker pull picsou83/compta-libremen-com:latest
 3) Lancement de l'image :
 
 ```
-sudo docker run -i --name comptalibremen -t -v comptalibremen_app:/var/www/html/Compta/ -v comptalibremen_bdd:/var/lib/postgresql/ -d -p 8080:80 compta-libremen-com
+sudo docker run -i --name comptalibremen -t -v comptalibremen_app:/var/www/html/Compta/ -v comptalibremen_bdd:/var/lib/postgresql/ -d picsou83/compta-libremen-com:first
 ```
 
 Avec :
