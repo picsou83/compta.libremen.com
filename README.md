@@ -14,7 +14,8 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 
 (image debian + apache + perl + PostgreSQL + compta.libremen.com)
 
-1) Installation de Docker
+1) Installation de Docker :
+
 Docker est maintenant disponible sur toutes les distributions récentes. Pour l’installer sur une distribution
 
 - à base de rpm
