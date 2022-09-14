@@ -18,29 +18,33 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 1) Installation de Docker :
 
 Docker est maintenant disponible sur toutes les distributions récentes. Pour l’installer sur une distribution
-
 - à base de rpm
-```yum install docker```
+```
+yum install docker
+```
 - à base de deb
-```apt-get update
-apt-get install docker.io```
+```
+apt-get update
+apt-get install docker.io
+```
 
 2) Installation de l’image compta-libremen-com (debian + apache + perl + PostgreSQL):
-
-```docker pull picsou83/compta-libremen-com:latest```
+```
+docker pull picsou83/compta-libremen-com:latest
+```
 
 3) Lancement de l'image :
-
-```sudo docker run -i --name comptalibremen -t -v rep_app:/var/www/html/Compta/ -v rep_bdd:/var/lib/postgresql/ -d picsou83/compta-libremen-com:first```
-
+```
+sudo docker run -i --name comptalibremen -t -v rep_app:/var/www/html/Compta/ -v rep_bdd:/var/lib/postgresql/ -d picsou83/compta-libremen-com:first
+```
 Avec :
-
 - comptalibremen : nom du Docker voulu
 - rep_app et rep_bdd : répertoire où les données de compta-libremen-com sont mises sur l’hôte (par défaut /var/lib/docker/volumes/)
 
 4) Récupération de l’adresse IP du conteneur
-
-```sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen```
+```
+sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
+```
 
 5) Enjoys
 
@@ -53,6 +57,35 @@ identifiants *(mot de passe)*
 -  comptalibremen: username **superadmin** password: **admin**
 
 ## Docker Images via Dockerfile
+
+1)  Télécharger les sources
+- Créer un dossier
+- Télécharger les sources : https://github.com/picsou83/compta.libremen.com/archive/refs/heads/main.zip
+
+2) Générer l'image
+- Se positionner dans le répertoire contenant les sources
+- Lancer la commande :
+```
+docker build -t compta-libremen-com .
+```
+3) Lancement de l'image :
+```
+sudo docker run -i --name comptalibremen -t -v rep_app:/var/www/html/Compta/ -v rep_bdd:/var/lib/postgresql/ -d compta-libremen-com
+```
+Avec :
+
+- comptalibremen : nom du Docker voulu
+- rep_app et rep_bdd : répertoire où les données de compta-libremen-com sont mises sur l’hôte (par défaut /var/lib/docker/volumes/)
+
+4) Récupération de l’adresse IP du conteneur
+```
+sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
+```
+
+5) Enjoys
+
+* [http://172.17.0.X](http://172.17.0.X/)
+
 
 ## Docker commandes
 ```sh
