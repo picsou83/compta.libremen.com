@@ -20,26 +20,18 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 Docker est maintenant disponible sur toutes les distributions récentes. Pour l’installer sur une distribution
 
 - à base de rpm
-```
-yum install docker
-```
+```yum install docker```
 - à base de deb
-```
-apt-get update
-apt-get install docker.io
-```
+```apt-get update
+apt-get install docker.io```
 
 2) Installation de l’image compta-libremen-com (debian + apache + perl + PostgreSQL):
 
-```
-docker pull picsou83/compta-libremen-com:latest
-```
+```docker pull picsou83/compta-libremen-com:latest```
 
 3) Lancement de l'image :
 
-```
-sudo docker run -i --name comptalibremen -t -v rep_app:/var/www/html/Compta/ -v rep_bdd:/var/lib/postgresql/ -d picsou83/compta-libremen-com:first
-```
+```sudo docker run -i --name comptalibremen -t -v rep_app:/var/www/html/Compta/ -v rep_bdd:/var/lib/postgresql/ -d picsou83/compta-libremen-com:first```
 
 Avec :
 
@@ -48,9 +40,7 @@ Avec :
 
 4) Récupération de l’adresse IP du conteneur
 
-```
-sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
-```
+```sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen```
 
 5) Enjoys
 
