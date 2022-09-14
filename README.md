@@ -41,7 +41,7 @@ sudo docker run -i --name comptalibremen -t -v rep_app:/var/www/html/Compta/ -v 
 ```
 Avec :
 - comptalibremen : nom du Docker voulu
-- rep_app et rep_bdd : répertoire où les données de compta-libremen-com sont mises sur l’hôte (par défaut /var/lib/docker/volumes/)
+- rep_app et rep_bdd : répertoire où les données sont mises sur l’hôte (par défaut /var/lib/docker/volumes/)
 
 4) Récupération de l’adresse IP du conteneur
 ```
@@ -55,10 +55,9 @@ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
 ## Docker Images via Dockerfile
 
 1)  Télécharger les sources
-- Créer un dossier
-- Télécharger les sources : https://github.com/picsou83/compta.libremen.com/archive/refs/heads/main.zip
+https://github.com/picsou83/compta.libremen.com/archive/refs/heads/main.zip
 
-2) Générer l'image
+2) Génération de l'image
 - Se positionner dans le répertoire contenant les sources
 - Lancer la commande :
 ```
