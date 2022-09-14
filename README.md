@@ -4,6 +4,8 @@ compta.libremen.com est un logiciel libre de comptabilité en partie double perm
 
 Il offre les fonctions de base nécessaires à la génération des documents courants (journal général, plan comptable, grand livre, balance...) et des fonctions d'exportation des données permettant leur traitement par d'autres logiciels du système d'information de l'entreprise
 
+La version initiale (1.0) de ce logiciel est disponible sur le site https://compta.libremen.com/ 
+
 Ce logiciel est régi par la licence CeCILL-C soumise au droit français et respectant les principes de diffusion des logiciels libres. Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL-C telle que diffusée par le CEA, le CNRS et l'INRIA sur le site "http://www.cecill.info".
 
 ## Sommaire
