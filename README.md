@@ -33,7 +33,7 @@ apt-get install docker.io
 
 2) Installation de l’image compta-libremen-com (debian + apache + perl + PostgreSQL):
 ```
-docker pull picsou83/compta-libremen-com:latest
+docker pull picsou83/compta-libremen-com:first
 ```
 
 3) Lancement de l'image :
