@@ -117,7 +117,9 @@ $ docker tag [UUID] [image]:[tag] # Tagger une image
 ## Tips
 
 sous firefox il faut modifier un paramètre pour pouvoir ouvrir un pdf directement à travers le naviguateur:
+
 menu => préférence => Général => #Applications
+
 Portable Document Format(PDF) => ouvrir dans firefox
 
 
