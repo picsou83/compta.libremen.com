@@ -12,14 +12,14 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 
 ## Sommaire
 
-- [Docker Images via le Hub Docker](#docker-images-via-le-hub-docker)
-- [Docker Images via Dockerfile](#docker-images-via-Dockerfile)
+- [Installation via le Hub Docker](#docker-images-via-le-hub-docker)
+- [Installation via Dockerfile](#docker-images-via-Dockerfile)
 - [Docker commandes](#docker-commandes)
 - [Identifiants](#identifiants)
 - [Tips](#tips)
 - [Screenshot](#Screenshot)
 
-## Docker Images via le Hub Docker
+## Installation via le Hub Docker
 
 1) Installation de Docker :
 
@@ -56,7 +56,7 @@ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
 
 * [http://172.17.0.X](http://172.17.0.X/)
 
-## Docker Images via Dockerfile
+## Installation via Dockerfile
 
 1)  Télécharger les sources
 https://github.com/picsou83/compta.libremen.com/archive/refs/heads/main.zip
