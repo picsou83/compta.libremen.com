@@ -14,6 +14,7 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 - [Installation manuelle](#Installation-manuelle)
 - [Identifiants](#identifiants)
 - [Tips](#tips)
+- [Screenshot](#Screenshot)
 
 ## Docker Images via le Hub Docker
 
@@ -118,6 +119,21 @@ sous firefox il faut modifier un paramètre pour pouvoir ouvrir un pdf directeme
 menu => préférence => Général => #Applications
 
 Portable Document Format(PDF) => ouvrir dans firefox
+
+## Screenshot
+
+![menu](https://user-images.githubusercontent.com/34648108/190163408-bc69fc56-8386-4b47-8014-bfbad673ada3.jpeg)
+
+![journaux](https://user-images.githubusercontent.com/34648108/190163387-790ba81a-6bd7-4f79-a98b-2aeb22b0a4a8.jpeg)
+
+![balance](https://user-images.githubusercontent.com/34648108/190163375-a69ef6f3-8cab-4bdc-9f91-d8f4f21005ae.jpeg)
+
+![bilan](https://user-images.githubusercontent.com/34648108/190163359-00062b30-486f-4bac-a427-1a4c47325073.jpeg)
+
+
+
+
+
 
 
 
