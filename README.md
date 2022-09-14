@@ -105,8 +105,6 @@ $ docker tag [UUID] [image]:[tag] # Tagger une image
 ```
 
 
-## Installation manuelle
-
 ## identifiants
 
 -  SSH: username **root** password: **comptalibre**
