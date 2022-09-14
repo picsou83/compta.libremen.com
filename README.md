@@ -6,13 +6,13 @@ Il offre les fonctions de base nécessaires à la génération des documents cou
 
 Ce logiciel est régi par la licence CeCILL-C soumise au droit français et respectant les principes de diffusion des logiciels libres. Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL-C telle que diffusée par le CEA, le CNRS et l'INRIA sur le site "http://www.cecill.info".
 
+## Sommaire
+
 - [Docker Images via le Hub Docker](#docker-images-via-le-hub-docker)
 - [Docker Images via Dockerfile](#docker-images-via-Dockerfile)
 - [Installation manuelle](#Installation-manuelle)
 
 ## Docker Images via le Hub Docker
-
-(image debian + apache + perl + PostgreSQL + compta.libremen.com)
 
 1) Installation de Docker :
 
@@ -30,6 +30,8 @@ apt-get install docker.io
 
 2) Installation de l’image compta-libremen-com:
 
+l'image est composée de debian + apache + perl + PostgreSQL + compta.libremen.com
+
 ```
 docker pull picsou83/compta-libremen-com:latest
 ```
@@ -42,8 +44,8 @@ sudo docker run -i --name comptalibremen -t -v comptalibremen_app:/var/www/html/
 
 Avec :
 
-comptalibremen : nom du Docker voulu
-comptalibremen_app et comptalibremen_bdd : répertoire où les données de compta-libremen-com sont mises sur l’hôte (par défaut /var/lib/docker/volumes/)
+- comptalibremen : nom du Docker voulu
+- comptalibremen_app et comptalibremen_bdd : répertoire où les données de compta-libremen-com sont mises sur l’hôte (par défaut /var/lib/docker/volumes/)
 
 4) Récupération de l’adresse IP du conteneur
 
