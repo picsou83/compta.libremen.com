@@ -6,6 +6,8 @@ Il offre les fonctions de base nécessaires à la génération des documents cou
 
 La version initiale (1.0) de ce logiciel est disponible sur le site https://compta.libremen.com/ 
 
+La version disponible ici est une version modifiée et packagé pour un déploiement rapide via docker.
+
 Ce logiciel est régi par la licence CeCILL-C soumise au droit français et respectant les principes de diffusion des logiciels libres. Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL-C telle que diffusée par le CEA, le CNRS et l'INRIA sur le site "http://www.cecill.info".
 
 ## Sommaire
@@ -13,7 +15,6 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 - [Docker Images via le Hub Docker](#docker-images-via-le-hub-docker)
 - [Docker Images via Dockerfile](#docker-images-via-Dockerfile)
 - [Docker commandes](#docker-commandes)
-- [Installation manuelle](#Installation-manuelle)
 - [Identifiants](#identifiants)
 - [Tips](#tips)
 - [Screenshot](#Screenshot)
