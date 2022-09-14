@@ -1,10 +1,18 @@
-# compta.libremen.com via docker (debian + apache + perl + PostgreSQL)
+# compta.libremen.com 
+
+compta.libremen.com est un logiciel de comptabilité en partie double permettant d'enregistrer des écritures comptables de façon aisée, rapide et fiable
+
+Il offre les fonctions de base nécessaires à la génération des documents courants (journal général, plan comptable, grand livre, balance...) et des fonctions d'exportation des données permettant leur traitement par d'autres logiciels du système d'information de l'entreprise
+
+Ce logiciel est régi par la licence CeCILL-C soumise au droit français et respectant les principes de diffusion des logiciels libres. Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL-C telle que diffusée par le CEA, le CNRS et l'INRIA sur le site "http://www.cecill.info".
 
 - [Docker Images via le Hub Docker](#docker-images-via-le-hub-docker)
 - [Docker Images via Dockerfile](#docker-images-via-Dockerfile)
 - [Installation manuelle](#Installation-manuelle)
 
 ## Docker Images via le Hub Docker
+
+(image debian + apache + perl + PostgreSQL + compta.libremen.com)
 
 1) Installation de Docker
 Docker est maintenant disponible sur toutes les distributions récentes. Pour l’installer sur une distribution
