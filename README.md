@@ -12,6 +12,7 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 - [Docker Images via Dockerfile](#docker-images-via-Dockerfile)
 - [Docker commandes](#docker-commandes)
 - [Installation manuelle](#Installation-manuelle)
+- [Identifiants](#identifiants)
 
 ## Docker Images via le Hub Docker
 
@@ -49,12 +50,6 @@ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
 5) Enjoys
 
 * [http://172.17.0.X](http://172.17.0.X/)
-
-identifiants *(mot de passe)*
--------------------------------------------
--  SSH: username **root** password: **comptalibre**
--  PostgreSQL, Adminer: username **compta** password: **compta** dbname : **comptalibre** 
--  comptalibremen: username **superadmin** password: **admin**
 
 ## Docker Images via Dockerfile
 
@@ -111,5 +106,11 @@ $ docker tag [UUID] [image]:[tag] # Tagger une image
 
 
 ## Installation manuelle
+
+## identifiants
+
+-  SSH: username **root** password: **comptalibre**
+-  PostgreSQL, Adminer: username **compta** password: **compta** dbname : **comptalibre** 
+-  comptalibremen: username **superadmin** password: **admin**
 
 
