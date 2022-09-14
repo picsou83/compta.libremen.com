@@ -13,6 +13,7 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 - [Docker commandes](#docker-commandes)
 - [Installation manuelle](#Installation-manuelle)
 - [Identifiants](#identifiants)
+- [Tips](#tips)
 
 ## Docker Images via le Hub Docker
 
@@ -112,5 +113,12 @@ $ docker tag [UUID] [image]:[tag] # Tagger une image
 -  SSH: username **root** password: **comptalibre**
 -  PostgreSQL, Adminer: username **compta** password: **compta** dbname : **comptalibre** 
 -  comptalibremen: username **superadmin** password: **admin**
+
+## Tips
+
+sous firefox il faut modifier un paramètre pour pouvoir ouvrir un pdf directement à travers le naviguateur:
+menu => préférence => Général => #Applications
+Portable Document Format(PDF) => ouvrir dans firefox
+
 
 
