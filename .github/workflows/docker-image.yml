@@ -6,7 +6,8 @@ on:
     branches: [main]
     paths-ignore:
       - '**.md'
-      
+      - '**.yml'
+
   # run it during pull request
   pull_request:
 
