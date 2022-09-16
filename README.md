@@ -7,7 +7,7 @@
  </div>
 
 
-# compta.libremen.com v1.10
+# compta.libremen.com v1.10 
 
 compta.libremen.com est un logiciel libre de comptabilité en partie double permettant d'enregistrer des écritures comptables de façon aisée, rapide et fiable
 
