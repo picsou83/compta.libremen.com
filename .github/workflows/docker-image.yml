@@ -4,6 +4,9 @@ on:
   # run it on push to the default repository branch
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      
   # run it during pull request
   pull_request:
 
