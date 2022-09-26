@@ -113,6 +113,36 @@ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
 
 ## Windows => Installation via WSL
 
+> L'image est compatible WSL 1 et WSL 2
+
+1) Installer WSL (Windows Subsystem for Linux)
+
+2) importer l'image
+```
+wsl --import RepCompta C:\WSL c:\compta.tar.gz
+```
+
+3) Se connecter sur l'image
+```
+wsl -d Compta
+```
+
+4) démarrer les services
+```
+sudo su -
+```
+```
+service postgresql start
+```
+```
+service apache2 start
+```
+
+5) Enjoys
+
+* [http://192.168.122.X](http://192.168.122.X/)
+
+
 ## Docker commandes
 ```sh
 $ docker ps # Visualiser les conteneurs actifs
