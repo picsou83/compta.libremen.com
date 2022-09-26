@@ -20,8 +20,8 @@ La version disponible ici est une version modifiée avec de nouvelles fonctionna
 Ce logiciel est régi par la licence CeCILL-C soumise au droit français et respectant les principes de diffusion des logiciels libres. Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL-C telle que diffusée par le CEA, le CNRS et l'INRIA sur le site "http://www.cecill.info".
 
 ## Sommaire
-- [Linux => Installation via le Hub Docker](#linux--docker-images-via-le-hub-docker)
-- [Linux => Installation via Dockerfile](#linux--docker-images-via-Dockerfile)
+- [Linux => Installation via le Hub Docker](#linux--installation-via-le-hub-docker)
+- [Linux => Installation via Dockerfile](#linux--installation-via-dockerfile)
 - [Docker commandes](#docker-commandes)
 - [Identifiants](#identifiants)
 - [Tips](#tips)
