@@ -3,7 +3,6 @@
 <div align="center">
     <a href="https://github.com/picsou83/compta.libremen.com">
         <img width="100" height="100" src="https://user-images.githubusercontent.com/34648108/190251291-28a32777-ad26-4362-8a75-eb41a94c7be3.png">
-        
     </a> 
  </div> 
 
