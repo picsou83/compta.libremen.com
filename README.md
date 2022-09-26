@@ -23,7 +23,6 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 - [Screenshot](#Screenshot)
 - [Linux => Installation via le Hub Docker](#linux--installation-via-le-hub-docker)
 - [Linux => Installation via Dockerfile](#linux--installation-via-dockerfile)
-- [Linux => Installation via Dockerfile](#linux--installation-via-dockerfile)
 - [Linux => Installation manuelle](#linux--installation-manuelle)
 - [Windows => Installation via WSL](#windows--installation-via-wsl)
 - [Docker commandes](#docker-commandes)
