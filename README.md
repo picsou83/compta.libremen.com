@@ -20,12 +20,29 @@ La version disponible ici est une version modifiée avec de nouvelles fonctionna
 Ce logiciel est régi par la licence CeCILL-C soumise au droit français et respectant les principes de diffusion des logiciels libres. Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL-C telle que diffusée par le CEA, le CNRS et l'INRIA sur le site "http://www.cecill.info".
 
 ## Sommaire
+- [Screenshot](#Screenshot)
 - [Linux => Installation via le Hub Docker](#linux--installation-via-le-hub-docker)
 - [Linux => Installation via Dockerfile](#linux--installation-via-dockerfile)
+- [Linux => Installation via Dockerfile](#linux--installation-via-dockerfile)
+- [Linux => Installation manuelle](#linux--installation-manuelle)
+- [Windows => Installation via WSL](#windows--installation-via-wsl)
 - [Docker commandes](#docker-commandes)
 - [Identifiants](#identifiants)
 - [Tips](#tips)
-- [Screenshot](#Screenshot)
+
+
+## Screenshot
+
+![menu](https://user-images.githubusercontent.com/34648108/190163408-bc69fc56-8386-4b47-8014-bfbad673ada3.jpeg)
+
+![journaux](https://user-images.githubusercontent.com/34648108/190163387-790ba81a-6bd7-4f79-a98b-2aeb22b0a4a8.jpeg)
+
+![écriture](https://user-images.githubusercontent.com/34648108/190164057-300d0337-c744-4b7f-a80f-fb5a8ee1b239.jpeg)
+
+![balance](https://user-images.githubusercontent.com/34648108/190163375-a69ef6f3-8cab-4bdc-9f91-d8f4f21005ae.jpeg)
+
+![bilan](https://user-images.githubusercontent.com/34648108/190163359-00062b30-486f-4bac-a427-1a4c47325073.jpeg)
+
 
 ## Linux => Installation via le Hub Docker
 
@@ -93,6 +110,9 @@ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
 
 * [http://172.17.0.X](http://172.17.0.X/)
 
+## Linux => Installation manuelle
+
+## Windows => Installation via WSL
 
 ## Docker commandes
 ```sh
@@ -131,17 +151,6 @@ menu => préférence => Général => #Applications
 
 Portable Document Format(PDF) => ouvrir dans firefox
 
-## Screenshot
-
-![menu](https://user-images.githubusercontent.com/34648108/190163408-bc69fc56-8386-4b47-8014-bfbad673ada3.jpeg)
-
-![journaux](https://user-images.githubusercontent.com/34648108/190163387-790ba81a-6bd7-4f79-a98b-2aeb22b0a4a8.jpeg)
-
-![écriture](https://user-images.githubusercontent.com/34648108/190164057-300d0337-c744-4b7f-a80f-fb5a8ee1b239.jpeg)
-
-![balance](https://user-images.githubusercontent.com/34648108/190163375-a69ef6f3-8cab-4bdc-9f91-d8f4f21005ae.jpeg)
-
-![bilan](https://user-images.githubusercontent.com/34648108/190163359-00062b30-486f-4bac-a427-1a4c47325073.jpeg)
 
 
 
