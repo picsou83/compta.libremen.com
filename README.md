@@ -116,19 +116,20 @@ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
 
 1) Installer WSL (Windows Subsystem for Linux)
 
-2) importer l'image
-https://github.com/picsou83/compta.libremen.com/releases/download/compta/compta-libremen-WSL.tar.gz
+2)  Télécharger l'image
+[https://github.com/picsou83/compta.libremen.com/releases/download/compta/compta-libremen-WSL.tar.gz]
 
+3) importer l'image
 ```
 wsl --import RepCompta C:\WSL c:\compta-libremen-WSL.tar.gz
 ```
 
-3) Se connecter sur l'image
+4) Se connecter sur l'image
 ```
 wsl -d Compta
 ```
 
-4) démarrer les services
+5) démarrer les services
 ```
 sudo su -
 ```
@@ -139,7 +140,7 @@ service postgresql start
 service apache2 start
 ```
 
-5) Enjoys
+6) Enjoys
 
 * [http://192.168.122.X](http://192.168.122.X/)
 
