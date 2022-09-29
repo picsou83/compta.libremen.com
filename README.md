@@ -117,8 +117,12 @@ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
 1) Installer WSL (Windows Subsystem for Linux)
 
 a. Ouvrer la fenêtre Fonctionnalités de Windows :
+```
 via la commande Exécuter : optionalfeatures.
+```
+```
 via les Paramètres > Applications et fonctionnalités > Fonctionnalités facultatives > Plus de fonctionnalités Windows.
+```
 
 b. Ajouter Sous-système Windows pour Linux et Plateforme d'ordinateur virtuelle
 
