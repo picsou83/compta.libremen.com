@@ -133,7 +133,7 @@ Pour WSL 2 uniquement
 « Plateforme d’ordinateur virtuel »
 ```
 
-c. ou via le Terminal de commande (administrateur) (clic droit sur le menu windows) :
+c. Ou via le Terminal de commande (administrateur) (clic droit sur le menu windows) :
 
 Activer le composant « Sous-système Windows pour Linux  »
 ```
@@ -150,7 +150,7 @@ d. Redemarrer le PC
 2)  Télécharger l'image
 [https://github.com/picsou83/compta.libremen.com/releases/download/compta/compta-libremen-WSL.tar.gz]
 
-3) importer l'image
+3) Importer l'image
 ```
 wsl --import Compta C:\WSL c:\compta-libremen-WSL.tar.gz --version 1
 ```
@@ -160,7 +160,7 @@ wsl --import Compta C:\WSL c:\compta-libremen-WSL.tar.gz --version 1
 wsl -d Compta
 ```
 
-5) démarrer les services
+5) Démarrer les services
 
 Lors du lancement du service apache une fenêtre demande l'autorisation d'ouvrir un port => répondre oui
 
