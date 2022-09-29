@@ -126,13 +126,25 @@ via les Paramètres > Applications et fonctionnalités > Fonctionnalités facult
 
 b. Ajouter les fonctionnalités :
 ```
-Sous-système Windows pour Linux 
+« Sous-système Windows pour Linux  »
 ```
-Pour WSL 2
+Pour WSL 2 uniquement 
 ```
-Plateforme d'ordinateur virtuelle
+« Plateforme d’ordinateur virtuel »
 ```
-c. Redemarrer le PC
+
+c. ou via le Terminal de commande (administrateur) (clic droit sur le menu windows) :
+Activer le composant « Sous-système Windows pour Linux  »
+```
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+```
+Activer le composant « Plateforme d’ordinateur virtuel » (WSL 2 uniquement) 
+```
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+```
+
+d. Redemarrer le PC
+
 
 2)  Télécharger l'image
 [https://github.com/picsou83/compta.libremen.com/releases/download/compta/compta-libremen-WSL.tar.gz]
@@ -148,6 +160,9 @@ wsl -d Compta
 ```
 
 5) démarrer les services
+
+Lors du lancement du service apache une fenêtre demande l'autorisation d'ouvrir un port => répondre oui
+
 ```
 sudo su -
 ```
@@ -160,7 +175,7 @@ service apache2 start
 
 6) Enjoys
 
-* [http://192.168.122.X](http://192.168.122.X/)
+* [http://localhost](http://localhost/)
 
 
 ## Docker commandes
