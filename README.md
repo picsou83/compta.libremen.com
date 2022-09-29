@@ -124,8 +124,14 @@ via la commande Exécuter : optionalfeatures.
 via les Paramètres > Applications et fonctionnalités > Fonctionnalités facultatives > Plus de fonctionnalités Windows.
 ```
 
-b. Ajouter Sous-système Windows pour Linux et Plateforme d'ordinateur virtuelle
-
+b. Ajouter les fonctionnalités :
+```
+Sous-système Windows pour Linux 
+```
+Pour WSL 2
+```
+Plateforme d'ordinateur virtuelle
+```
 c. Redemarrer le PC
 
 2)  Télécharger l'image
