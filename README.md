@@ -116,12 +116,20 @@ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
 
 1) Installer WSL (Windows Subsystem for Linux)
 
+a. Ouvrer la fenêtre Fonctionnalités de Windows :
+via la commande Exécuter : optionalfeatures.
+via les Paramètres > Applications et fonctionnalités > Fonctionnalités facultatives > Plus de fonctionnalités Windows.
+
+b. Ajouter Sous-système Windows pour Linux et Plateforme d'ordinateur virtuelle
+
+c. Redemarrer le PC
+
 2)  Télécharger l'image
 [https://github.com/picsou83/compta.libremen.com/releases/download/compta/compta-libremen-WSL.tar.gz]
 
 3) importer l'image
 ```
-wsl --import RepCompta C:\WSL c:\compta-libremen-WSL.tar.gz
+wsl --import RepCompta C:\WSL c:\compta-libremen-WSL.tar.gz --version 1
 ```
 
 4) Se connecter sur l'image
