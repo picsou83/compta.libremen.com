@@ -134,6 +134,7 @@ Pour WSL 2 uniquement
 ```
 
 c. ou via le Terminal de commande (administrateur) (clic droit sur le menu windows) :
+
 Activer le composant « Sous-système Windows pour Linux  »
 ```
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
