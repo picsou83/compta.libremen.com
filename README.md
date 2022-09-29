@@ -139,7 +139,7 @@ c. Redemarrer le PC
 
 3) importer l'image
 ```
-wsl --import RepCompta C:\WSL c:\compta-libremen-WSL.tar.gz --version 1
+wsl --import Compta C:\WSL c:\compta-libremen-WSL.tar.gz --version 1
 ```
 
 4) Se connecter sur l'image
