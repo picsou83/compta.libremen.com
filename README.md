@@ -34,7 +34,7 @@ Le [WIKI](https://github.com/picsou83/compta.libremen.com/wiki) vous fournit tou
     * [Linux => Installation manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Linux_installation_manuelle)
     * [Windows => Installation via WSL](https://github.com/picsou83/compta.libremen.com/wiki/Windows_installation_WSL)
   * [Configuration](https://github.com/picsou83/compta.libremen.com/wiki/Home)
-* [Identifiants](https://github.com/picsou83/compta.libremen.com/wiki/identifiants)
+* [Identifiants & Tips](https://github.com/picsou83/compta.libremen.com/wiki/identifiants&tips)
 * [Screenshot](https://github.com/picsou83/compta.libremen.com/wiki/Screenshot)
 * [Roadmap](https://github.com/picsou83/compta.libremen.com/wiki/Roadmap)
 
