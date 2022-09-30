@@ -8,6 +8,9 @@
     <a href="https://github.com/picsou83/compta.libremen.com/releases">
         <img src="https://img.shields.io/github/release/picsou83/compta.libremen.com.svg">
     </a>
+    <a href="https://hub.docker.com/repository/docker/picsou83/compta-libremen-com">
+        <img src="https://img.shields.io/badge/docker%20image-latest-brightgreen">
+    </a>
     </div>   
         <h1>compta.libremen.com</h1>
     <p>
