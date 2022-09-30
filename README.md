@@ -16,7 +16,7 @@ La version initiale (1.0) de ce logiciel est disponible sur le site https://comp
 
 La version disponible ici est une version modifiée avec de nouvelles fonctionnalités et packagée pour un déploiement rapide via docker. (Debian avec  Apache + Mod_perl + PostgreSQL)
 
-## Bien démarrer (https://github.com/picsou83/compta.libremen.com/wiki)
+## Bien démarrer
 Le [wiki](https://github.com/picsou83/compta.libremen.com/wiki) vous fournit toutes les informations nécessaires pour être opérationnel!.
 
 
