@@ -8,7 +8,7 @@
 
 # compta.libremen.com
 
-compta.libremen.com est un logiciel libre de comptabilité en partie double permettant d'enregistrer des écritures comptables de façon aisée, rapide et fiable
+compta.libremen.com est un logiciel libre et gratuit de comptabilité en partie double permettant d'enregistrer des écritures comptables de façon aisée, rapide et fiable
 
 Il offre les fonctions de base nécessaires à la génération des documents courants (journal général, plan comptable, grand livre, balance...) et des fonctions d'exportation des données permettant leur traitement par d'autres logiciels du système d'information de l'entreprise
 
@@ -16,14 +16,17 @@ La version initiale (1.0) de ce logiciel est disponible sur le site https://comp
 
 La version disponible ici est une version modifiée avec de nouvelles fonctionnalités et packagée pour un déploiement rapide via docker. (Debian avec  Apache + Mod_perl + PostgreSQL)
 
-Ce logiciel est régi par la licence CeCILL-C soumise au droit français et respectant les principes de diffusion des logiciels libres. Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL-C telle que diffusée par le CEA, le CNRS et l'INRIA sur le site "http://www.cecill.info".
+## [Bien démarrer]([https://github.com/picsou83/compta.libremen.com/wiki](https://github.com/picsou83/compta.libremen.com/wiki)]
+La [documentation]([https://github.com/picsou83/compta.libremen.com/wiki](https://github.com/picsou83/compta.libremen.com/wiki)) vous fournit toutes les informations nécessaires pour être opérationnel !.
+
 
 ## Sommaire
 - [Screenshot](#Screenshot)
-- [Linux => Installation via le Hub Docker](#linux--installation-via-le-hub-docker)
-- [Linux => Installation via Dockerfile](#linux--installation-via-dockerfile)
-- [Linux => Installation manuelle](#linux--installation-manuelle)
-- [Windows => Installation via WSL](#windows--installation-via-wsl)
+- [Wiki](https://github.com/picsou83/compta.libremen.com/wiki)
+- [Linux => Installation via le Hub Docker](https://github.com/picsou83/compta.libremen.com/wiki/Linux_installation_Hub_Docker)
+- [Linux => Installation via Dockerfile](https://github.com/picsou83/compta.libremen.com/wiki/Linux_installation_Dockerfile)
+- [Linux => Installation manuelle]([#linux--installation-manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Linux_installation_manuelle))
+- [Windows => Installation via WSL]([#windows--installation-via-wsl](https://github.com/picsou83/compta.libremen.com/wiki/Windows_installation_WSL))
 - [Docker commandes](#docker-commandes)
 - [Identifiants](#identifiants)
 - [Tips](#tips)
@@ -40,143 +43,6 @@ Ce logiciel est régi par la licence CeCILL-C soumise au droit français et resp
 ![balance](https://user-images.githubusercontent.com/34648108/190163375-a69ef6f3-8cab-4bdc-9f91-d8f4f21005ae.jpeg)
 
 ![bilan](https://user-images.githubusercontent.com/34648108/190163359-00062b30-486f-4bac-a427-1a4c47325073.jpeg)
-
-
-## Linux => Installation via le Hub Docker
-
-1) Installation de Docker :
-
-Docker est maintenant disponible sur toutes les distributions récentes. Pour l’installer sur une distribution
-- à base de rpm
-```
-yum install docker
-```
-- à base de deb
-```
-apt-get update
-apt-get install docker.io
-```
-
-2) Installation de l’image compta-libremen-com (debian + apache + perl + PostgreSQL):
-```
-docker pull picsou83/compta-libremen-com:latest
-```
-
-3) Lancement de l'image :
-```
-sudo docker run -i --name comptalibremen -t -v rep_app:/var/www/html/Compta/ -v rep_bdd:/var/lib/postgresql/ -d picsou83/compta-libremen-com:latest
-```
-Avec :
-- comptalibremen : nom du Docker voulu
-- rep_app et rep_bdd : répertoire où les données sont mises sur l’hôte (par défaut /var/lib/docker/volumes/)
-
-4) Récupération de l’adresse IP du conteneur
-```
-sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
-```
-
-5) Enjoys
-
-* [http://172.17.0.X](http://172.17.0.X/)
-
-## Linux => Installation via Dockerfile
-
-1)  Télécharger les sources
-https://github.com/picsou83/compta.libremen.com/archive/refs/heads/main.zip
-
-2) Génération de l'image
-- Se positionner dans le répertoire contenant les sources
-- Lancer la commande :
-```
-docker build -t compta-libremen-com .
-```
-3) Lancement de l'image :
-```
-sudo docker run -i --name comptalibremen -t -v rep_app:/var/www/html/Compta/ -v rep_bdd:/var/lib/postgresql/ -d compta-libremen-com
-```
-Avec :
-
-- comptalibremen : nom du Docker voulu
-- rep_app et rep_bdd : répertoire où les données de compta-libremen-com sont mises sur l’hôte (par défaut /var/lib/docker/volumes/)
-
-4) Récupération de l’adresse IP du conteneur
-```
-sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' comptalibremen
-```
-
-5) Enjoys
-
-* [http://172.17.0.X](http://172.17.0.X/)
-
-## Linux => Installation manuelle
-
-## Windows => Installation via WSL
-
-> L'image est compatible WSL 1 et WSL 2
-
-1) Installer WSL (Windows Subsystem for Linux)
-
-a. Ouvrer la fenêtre Fonctionnalités de Windows :
-```
-via la commande Exécuter : optionalfeatures.
-```
-```
-via les Paramètres > Applications et fonctionnalités > Fonctionnalités facultatives > Plus de fonctionnalités Windows.
-```
-
-b. Ajouter les fonctionnalités :
-```
-« Sous-système Windows pour Linux  »
-```
-Pour WSL 2 uniquement 
-```
-« Plateforme d’ordinateur virtuel »
-```
-
-c. Ou via le Terminal de commande (administrateur) (clic droit sur le menu windows) :
-
-Activer le composant « Sous-système Windows pour Linux  »
-```
-dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-```
-Activer le composant « Plateforme d’ordinateur virtuel » (WSL 2 uniquement) 
-```
-dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-```
-
-d. Redemarrer le PC
-
-
-2)  Télécharger l'image
-[https://github.com/picsou83/compta.libremen.com/releases/download/compta/compta-libremen-WSL.tar.gz]
-
-3) Importer l'image
-```
-wsl --import Compta C:\WSL c:\compta-libremen-WSL.tar.gz --version 1
-```
-
-4) Se connecter sur l'image
-```
-wsl -d Compta
-```
-
-5) Démarrer les services
-
-Lors du lancement du service apache une fenêtre demande l'autorisation d'ouvrir un port => répondre oui
-
-```
-sudo su -
-```
-```
-service postgresql start
-```
-```
-service apache2 start
-```
-
-6) Enjoys
-
-* [http://localhost](http://localhost/)
 
 
 ## Docker commandes
