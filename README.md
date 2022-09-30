@@ -35,3 +35,5 @@ Le [WIKI](https://github.com/picsou83/compta.libremen.com/wiki) vous fournit tou
 * [Screenshot](https://github.com/picsou83/compta.libremen.com/wiki/Screenshot)
 * [Roadmap](https://github.com/picsou83/compta.libremen.com/wiki/Roadmap)
 
+## Aide et Support
+Si vous avez besoin d'aide, vous pouvez utilisez le salon de discussions  et pour des bugs les issues
