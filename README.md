@@ -29,12 +29,12 @@ Le [WIKI](https://github.com/picsou83/compta.libremen.com/wiki) vous fournit tou
 
 * [Home](https://github.com/picsou83/compta.libremen.com/wiki/Home)
   * [Installation](https://github.com/picsou83/compta.libremen.com/wiki/Home)
-    * [Linux => Installation Hub Docker](https://github.com/picsou83/compta.libremen.com/wiki/Linux_installation_Hub_Docker)
-    * [Linux => Installation Dockerfile](https://github.com/picsou83/compta.libremen.com/wiki/Linux_installation_Dockerfile)
-    * [Linux => Installation manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Linux_installation_manuelle)
-    * [Windows => Installation via WSL](https://github.com/picsou83/compta.libremen.com/wiki/Windows_installation_WSL)
+    * [Linux => Installation Hub Docker](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-Hub-Docker)
+    * [Linux => Installation Dockerfile](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-Dockerfile)
+    * [Linux => Installation manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-manuelle)
+    * [Windows => Installation via WSL](https://github.com/picsou83/compta.libremen.com/wiki/Windows-installation-WSL)
   * [Configuration](https://github.com/picsou83/compta.libremen.com/wiki/Home)
-* [Identifiants & Tips](https://github.com/picsou83/compta.libremen.com/wiki/identifiants&tips)
+* [Identifiants & Tips](https://github.com/picsou83/compta.libremen.com/wiki/Identifiants-&-Tips)
 * [Screenshot](https://github.com/picsou83/compta.libremen.com/wiki/Screenshot)
 * [Roadmap](https://github.com/picsou83/compta.libremen.com/wiki/Roadmap)
 
