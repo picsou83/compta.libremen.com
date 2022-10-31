@@ -517,8 +517,9 @@ ALTER SEQUENCE public.tblcerfa_2_id_entry_seq OWNED BY public.tblcerfa_2.id_entr
 CREATE TABLE public.tblconfig_liste (
     id_client integer NOT NULL,
     config_libelle text NOT NULL,
-    config_compte text NOT NULL,
-    config_journal text NOT NULL
+    config_compte text,
+    config_journal text,
+    module text NOT NULL
 );
 
 
@@ -777,44 +778,6 @@ CREATE TABLE public.tbllocked_month (
 
 ALTER TABLE public.tbllocked_month OWNER TO compta;
 
---
--- Name: tblloyer_liste; Type: TABLE; Schema: public; Owner: compta
---
-
-CREATE TABLE public.tblloyer_liste (
-    id_client integer NOT NULL,
-    loyer_libelle text NOT NULL,
-    loyer_date text NOT NULL,
-    loyer_montant integer DEFAULT 0 NOT NULL,
-    loyer_classe4 text NOT NULL,
-    loyer_classe7 text NOT NULL,
-    loyer_piece text
-);
-
-
-ALTER TABLE public.tblloyer_liste OWNER TO compta;
-
---
--- Name: tblrecurrent_liste; Type: TABLE; Schema: public; Owner: compta
---
-
-CREATE TABLE public.tblrecurrent_liste (
-    id_client integer NOT NULL,
-    recurrent_libelle text NOT NULL,
-    recurrent_date text NOT NULL,
-    recurrent_debit integer NOT NULL,
-    recurrent_credit integer NOT NULL,
-    recurrent_compte1 text NOT NULL,
-    recurrent_compte2 text NOT NULL,
-    recurrent_piece text,
-    recurrent_libre text,
-    recurrent_docs1 text,
-    recurrent_docs2 text,
-    recurrent_journal text NOT NULL
-);
-
-
-ALTER TABLE public.tblrecurrent_liste OWNER TO compta;
 
 --
 -- Name: tbltva; Type: TABLE; Schema: public; Owner: compta
@@ -931,7 +894,7 @@ COPY public.tblcompte (id_client, numero_compte, libelle_compte, default_id_tva,
 -- Data for Name: tblconfig_liste; Type: TABLE DATA; Schema: public; Owner: compta
 --
 
-COPY public.tblconfig_liste (id_client, config_libelle, config_compte, config_journal) FROM stdin;
+COPY public.tblconfig_liste (id_client, config_libelle, config_compte, config_journal, module) FROM stdin;
 \.
 
 
@@ -1008,22 +971,6 @@ COPY public.tbljournal_staging (date_ecriture, id_facture, libelle, debit, credi
 --
 
 COPY public.tbllocked_month (id_client, fiscal_year, id_month, date_locked) FROM stdin;
-\.
-
-
---
--- Data for Name: tblloyer_liste; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tblloyer_liste (id_client, loyer_libelle, loyer_date, loyer_montant, loyer_classe4, loyer_classe7, loyer_piece) FROM stdin;
-\.
-
-
---
--- Data for Name: tblrecurrent_liste; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tblrecurrent_liste (id_client, recurrent_libelle, recurrent_date, recurrent_debit, recurrent_credit, recurrent_compte1, recurrent_compte2, recurrent_piece, recurrent_libre, recurrent_docs1, recurrent_docs2, recurrent_journal) FROM stdin;
 \.
 
 
@@ -1197,22 +1144,6 @@ ALTER TABLE ONLY public.tbljournal_liste
 
 ALTER TABLE ONLY public.tbljournal
     ADD CONSTRAINT tbljournal_id_line PRIMARY KEY (id_line);
-
-
---
--- Name: tblloyer_liste tblloyer_liste_id_client_loyer_libelle; Type: CONSTRAINT; Schema: public; Owner: compta
---
-
-ALTER TABLE ONLY public.tblloyer_liste
-    ADD CONSTRAINT tblloyer_liste_id_client_loyer_libelle PRIMARY KEY (id_client, loyer_libelle);
-
-
---
--- Name: tblrecurrent_liste tblrecurrent_liste_id_client_recurrent_libelle_recurrent_date_r; Type: CONSTRAINT; Schema: public; Owner: compta
---
-
-ALTER TABLE ONLY public.tblrecurrent_liste
-    ADD CONSTRAINT tblrecurrent_liste_id_client_recurrent_libelle_recurrent_date_r PRIMARY KEY (id_client, recurrent_libelle, recurrent_date, recurrent_compte1, recurrent_compte2, recurrent_journal, recurrent_debit, recurrent_credit);
 
 
 --
@@ -1490,22 +1421,6 @@ ALTER TABLE ONLY public.tbljournal_liste
 
 ALTER TABLE ONLY public.tbllocked_month
     ADD CONSTRAINT tbllocked_month_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON DELETE CASCADE;
-
-
---
--- Name: tblloyer_liste tblloyer_liste_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
---
-
-ALTER TABLE ONLY public.tblloyer_liste
-    ADD CONSTRAINT tblloyer_liste_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON DELETE CASCADE;
-
-
---
--- Name: tblrecurrent_liste tblrecurrent_liste_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
---
-
-ALTER TABLE ONLY public.tblrecurrent_liste
-    ADD CONSTRAINT tblrecurrent_liste_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON DELETE CASCADE;
 
 
 --
