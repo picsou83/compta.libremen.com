@@ -33,6 +33,7 @@ Le [WIKI](https://github.com/picsou83/compta.libremen.com/wiki) vous fournit tou
     * [Linux => Installation Dockerfile](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-Dockerfile)
     * [Linux => Installation manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-manuelle)
     * [Windows => Installation via WSL](https://github.com/picsou83/compta.libremen.com/wiki/Windows-installation-WSL)
+  * [Mise à jour](https://github.com/picsou83/compta.libremen.com/wiki/Mise-à-jour)
   * [Configuration](https://github.com/picsou83/compta.libremen.com/wiki/Home)
 * [Identifiants & Tips](https://github.com/picsou83/compta.libremen.com/wiki/Identifiants-&-Tips)
 * [Screenshot](https://github.com/picsou83/compta.libremen.com/wiki/Screenshot)
