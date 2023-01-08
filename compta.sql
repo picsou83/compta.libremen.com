@@ -140,20 +140,20 @@ ALTER FUNCTION public.date_is_in_fiscal_year_2(arg_date date, fiscal_year_start 
 CREATE FUNCTION public.delete_account_data(id_client integer) RETURNS void
     LANGUAGE sql
     AS $_$
-update tbljournal set id_export = null where id_client = $1;	
-delete from tbllocked_month where id_client = $1;	
-delete from tblexport where id_client = $1;	
-delete from tbljournal where id_client = $1;
-delete from tbljournal_liste where id_client = $1;
-delete from tbldocuments where id_client = $1;
-delete from tbldocuments_categorie where id_client = $1;
-delete from tblcompte where id_client = $1;
-delete from tbljournal_liste where id_client = $1;
-delete from tbljournal_staging where id_client = $1;
-delete from tblcerfa_2_detail where id_entry in (select id_entry from tblcerfa_2 where id_client = $1);
-delete from tblcerfa_2 where id_client = $1;
-delete from compta_user where id_client = $1;
-delete from compta_client where id_client = $1;
+update tbljournal set id_export = null where id_client = $1;	
+delete from tbllocked_month where id_client = $1;	
+delete from tblexport where id_client = $1;	
+delete from tbljournal where id_client = $1;
+delete from tbljournal_liste where id_client = $1;
+delete from tbldocuments where id_client = $1;
+delete from tbldocuments_categorie where id_client = $1;
+delete from tblcompte where id_client = $1;
+delete from tbljournal_liste where id_client = $1;
+delete from tbljournal_staging where id_client = $1;
+delete from tblcerfa_2_detail where id_entry in (select id_entry from tblcerfa_2 where id_client = $1);
+delete from tblcerfa_2 where id_client = $1;
+delete from compta_user where id_client = $1 and username != 'superadmin' ;
+delete from compta_client where id_client = $1;
 $_$;
 
 
@@ -230,27 +230,31 @@ ALTER FUNCTION public.import_staging(my_token_id text, my_fiscal_year integer, "
 -- Name: record_staging(text, integer); Type: FUNCTION; Schema: public; Owner: compta
 --
 
-CREATE FUNCTION public.record_staging(my_token_id text, my_id_entry integer) RETURNS void
+CREATE FUNCTION public.record_staging(my_token_id text, my_id_entry integer) RETURNS integer
     LANGUAGE plpgsql
     AS $_$
-BEGIN
-IF ( not (select sum(credit-debit) from tbljournal_staging where _token_id = $1) = 0 ) then RAISE EXCEPTION 'unbalanced'; END IF;
--- supprimer les champs où débit et crédit sont nulls
-delete from tbljournal_staging where ( coalesce(debit, 0) + coalesce(credit, 0) = 0 and _token_id = my_token_id);
--- si c'est une nouvelle entrée, id_entry = 0; lui affecter la nouvelle valeur
-IF my_id_entry = 0 THEN
-update tbljournal_staging set id_entry = (select nextval('tbljournal_id_entry_seq'::regclass)) where id_entry = 0 and _token_id = my_token_id;
-ELSE
--- si c'est une mise à jour d'une entrée existante, il faut la supprimer
-delete from tbljournal where id_entry = $2;
-END IF;
--- pratiquer l'insertion proprement dite
-insert into tbljournal (date_ecriture, id_facture, libelle, debit, credit, lettrage, id_line, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, pointage, id_export, documents1, documents2, recurrent)
-select date_ecriture, id_facture, libelle, debit, credit, lettrage, id_line, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, pointage, id_export, documents1, documents2, recurrent
-from tbljournal_staging where _token_id = $1;
--- si l'insertion s'est bien passée, on vide tbljournal_staging
-delete from tbljournal_staging where _token_id = $1;
-END;
+DECLARE _id_entry integer;
+BEGIN
+IF ( not (select sum(credit-debit) from tbljournal_staging where _token_id = $1) = 0 ) then RAISE EXCEPTION 'unbalanced'; END IF;
+-- supprimer les champs où débit et crédit sont nulls
+delete from tbljournal_staging where ( coalesce(debit, 0) + coalesce(credit, 0) = 0 and _token_id = my_token_id);
+-- si c'est une nouvelle entrée, id_entry = 0; lui affecter la nouvelle valeur
+IF my_id_entry = 0 THEN
+update tbljournal_staging set id_entry = (select nextval('tbljournal_id_entry_seq'::regclass)) where id_entry = 0 and _token_id = my_token_id;
+ELSE
+-- si c'est une mise à jour d'une entrée existante, il faut la supprimer
+delete from tbljournal where id_entry = $2;
+END IF;
+-- pratiquer l'insertion proprement dite
+insert into tbljournal (date_ecriture, id_facture, libelle, debit, credit, lettrage, id_line, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, pointage, id_export, documents1, documents2, recurrent)
+select date_ecriture, id_facture, libelle, debit, credit, lettrage, id_line, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, pointage, id_export, documents1, documents2, recurrent
+from tbljournal_staging where _token_id = $1;
+-- si l'insertion s'est bien passée, on vide tbljournal_stagin
+with t1 as (delete from tbljournal_staging where _token_id = $1
+RETURNING id_entry)
+select id_entry from t1 LIMIT 1 INTO _id_entry;
+RETURN _id_entry;
+END;
 $_$;
 
 
@@ -551,7 +555,8 @@ CREATE TABLE public.tbldocuments (
     date_reception date,
     montant integer DEFAULT 0 NOT NULL,
     check_banque boolean DEFAULT false NOT NULL,
-    id_compte text
+    id_compte text,
+    multi boolean DEFAULT false NOT NULL
 );
 
 
@@ -765,6 +770,18 @@ CREATE TABLE public.tbljournal_staging (
 ALTER TABLE public.tbljournal_staging OWNER TO compta;
 
 --
+-- Name: tbljournal_type; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tbljournal_type (
+    type_journal text NOT NULL
+);
+
+
+ALTER TABLE public.tbljournal_type OWNER TO compta;
+
+
+--
 -- Name: tbllocked_month; Type: TABLE; Schema: public; Owner: compta
 --
 
@@ -777,6 +794,141 @@ CREATE TABLE public.tbllocked_month (
 
 
 ALTER TABLE public.tbllocked_month OWNER TO compta;
+
+--
+-- Name: tblndf; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblndf (
+    id_client integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    piece_ref text NOT NULL,
+    piece_date date NOT NULL,
+    piece_compte text NOT NULL,
+    piece_libelle text NOT NULL,
+    piece_entry integer,
+    id_vehicule integer,
+    com1 text,
+    com2 text,
+    com3 text
+);
+
+
+ALTER TABLE public.tblndf OWNER TO compta;
+
+--
+-- Name: tblndf_bareme; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblndf_bareme (
+    id_client integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    vehicule text NOT NULL,
+    puissance text NOT NULL,
+    distance1 numeric,
+    distance2 numeric,
+    prime2 numeric,
+    distance3 numeric
+);
+
+
+ALTER TABLE public.tblndf_bareme OWNER TO compta;
+
+--
+-- Name: tblndf_detail; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblndf_detail (
+    id_client integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    piece_ref text NOT NULL,
+    frais_date date NOT NULL,
+    frais_compte text NOT NULL,
+    frais_libelle text NOT NULL,
+    frais_quantite integer,
+    frais_montant integer DEFAULT 0 NOT NULL,
+    frais_doc text,
+    frais_line integer NOT NULL,
+    frais_bareme numeric
+);
+
+
+ALTER TABLE public.tblndf_detail OWNER TO compta;
+
+--
+-- Name: tblndf_detail_frais_line_seq; Type: SEQUENCE; Schema: public; Owner: compta
+--
+
+CREATE SEQUENCE public.tblndf_detail_frais_line_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tblndf_detail_frais_line_seq OWNER TO compta;
+
+--
+-- Name: tblndf_detail_frais_line_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: compta
+--
+
+ALTER SEQUENCE public.tblndf_detail_frais_line_seq OWNED BY public.tblndf_detail.frais_line;
+
+
+--
+-- Name: tblndf_frais; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblndf_frais (
+    id_client integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    intitule text NOT NULL,
+    compte text NOT NULL,
+    tva numeric(4,2) DEFAULT '0'::numeric NOT NULL
+);
+
+
+ALTER TABLE public.tblndf_frais OWNER TO compta;
+
+--
+-- Name: tblndf_vehicule; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblndf_vehicule (
+    id_client integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    vehicule text NOT NULL,
+    puissance text NOT NULL,
+    vehicule_name text NOT NULL,
+    numero_compte text NOT NULL,
+    documents text,
+    id_vehicule integer NOT NULL,
+    electrique boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.tblndf_vehicule OWNER TO compta;
+
+--
+-- Name: tblndf_vehicule_id_vehicule_seq; Type: SEQUENCE; Schema: public; Owner: compta
+--
+
+CREATE SEQUENCE public.tblndf_vehicule_id_vehicule_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tblndf_vehicule_id_vehicule_seq OWNER TO compta;
+
+--
+-- Name: tblndf_vehicule_id_vehicule_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: compta
+--
+
+ALTER SEQUENCE public.tblndf_vehicule_id_vehicule_seq OWNED BY public.tblndf_vehicule.id_vehicule;
 
 
 --
@@ -841,6 +993,20 @@ ALTER TABLE ONLY public.tbljournal ALTER COLUMN id_line SET DEFAULT nextval('pub
 
 
 --
+-- Name: tblndf_detail frais_line; Type: DEFAULT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_detail ALTER COLUMN frais_line SET DEFAULT nextval('public.tblndf_detail_frais_line_seq'::regclass);
+
+
+--
+-- Name: tblndf_vehicule id_vehicule; Type: DEFAULT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_vehicule ALTER COLUMN id_vehicule SET DEFAULT nextval('public.tblndf_vehicule_id_vehicule_seq'::regclass);
+
+
+--
 -- Data for Name: compta_client; Type: TABLE DATA; Schema: public; Owner: compta
 --
 
@@ -857,47 +1023,6 @@ COPY public.compta_user (username, userpass, id_client, preferred_datestyle, nom
 superadmin	admin	1	SQL, dmy	superadmin		1	1	0
 \.
 
-
---
--- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.sessions (session_id, date_session, serialized_session) FROM stdin;
-\.
-
-
---
--- Data for Name: tblcerfa_2; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tblcerfa_2 (id_entry, id_item, id_client, fiscal_year, credit_first) FROM stdin;
-\.
-
-
---
--- Data for Name: tblcerfa_2_detail; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tblcerfa_2_detail (id_entry, numero_compte) FROM stdin;
-\.
-
-
---
--- Data for Name: tblcompte; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tblcompte (id_client, numero_compte, libelle_compte, default_id_tva, fiscal_year, contrepartie) FROM stdin;
-\.
-
-
---
--- Data for Name: tblconfig_liste; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tblconfig_liste (id_client, config_libelle, config_compte, config_journal, module) FROM stdin;
-\.
-
-
 --
 -- Data for Name: tbldatestyle; Type: TABLE DATA; Schema: public; Owner: compta
 --
@@ -906,15 +1031,6 @@ COPY public.tbldatestyle (id_datestyle, libelle) FROM stdin;
 iso	iso
 SQL, dmy	SQL, dmy
 \.
-
-
---
--- Data for Name: tbldocuments; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tbldocuments (id_client, id_name, libelle_cat_doc, fiscal_year, last_fiscal_year, date_upload, date_reception, montant, check_banque, id_compte) FROM stdin;
-\.
-
 
 --
 -- Data for Name: tbldocuments_categorie; Type: TABLE DATA; Schema: public; Owner: compta
@@ -925,54 +1041,18 @@ Temp	1
 Inter-exercice	1
 \.
 
-
 --
--- Data for Name: tblexport; Type: TABLE DATA; Schema: public; Owner: compta
+-- Data for Name: tbljournal_type; Type: TABLE DATA; Schema: public; Owner: compta
 --
 
-COPY public.tblexport (id_export, id_client, date_export, fiscal_year, date_validation) FROM stdin;
+COPY public.tbljournal_type (type_journal) FROM stdin;
+Achats
+Ventes
+Trésorerie
+Clôture
+OD
+A-nouveaux
 \.
-
-
---
--- Data for Name: tbljournal; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tbljournal (id_line, id_entry, num_mouvement, date_creation, date_ecriture, id_facture, libelle, debit, credit, lettrage, pointage, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, id_export, documents1, documents2, recurrent) FROM stdin;
-\.
-
-
---
--- Data for Name: tbljournal_import; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tbljournal_import (date_ecriture, id_facture, libelle, debit, credit, lettrage, id_line, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, _session_id, fiscal_year_offset, id_export, pointage, _token_id, documents1, documents2, num_mouvement, date_validation) FROM stdin;
-\.
-
-
---
--- Data for Name: tbljournal_liste; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tbljournal_liste (id_client, code_journal, libelle_journal, fiscal_year, type_journal) FROM stdin;
-\.
-
-
---
--- Data for Name: tbljournal_staging; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tbljournal_staging (date_ecriture, id_facture, libelle, debit, credit, lettrage, id_line, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, _session_id, fiscal_year_offset, id_export, pointage, _token_id, documents1, documents2, fiscal_year_start, fiscal_year_end, recurrent) FROM stdin;
-\.
-
-
---
--- Data for Name: tbllocked_month; Type: TABLE DATA; Schema: public; Owner: compta
---
-
-COPY public.tbllocked_month (id_client, fiscal_year, id_month, date_locked) FROM stdin;
-\.
-
 
 --
 -- Data for Name: tbltva; Type: TABLE DATA; Schema: public; Owner: compta
@@ -1048,6 +1128,21 @@ SELECT pg_catalog.setval('public.tbljournal_id_line_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.tbljournal_id_num_mouvement_seq', 1, false);
+
+
+--
+-- Name: tblndf_detail_frais_line_seq; Type: SEQUENCE SET; Schema: public; Owner: compta
+--
+
+SELECT pg_catalog.setval('public.tblndf_detail_frais_line_seq', 1, false);
+
+
+--
+-- Name: tblndf_vehicule_id_vehicule_seq; Type: SEQUENCE SET; Schema: public; Owner: compta
+--
+
+SELECT pg_catalog.setval('public.tblndf_vehicule_id_vehicule_seq', 1, false);
+
 
 
 --
@@ -1144,6 +1239,64 @@ ALTER TABLE ONLY public.tbljournal_liste
 
 ALTER TABLE ONLY public.tbljournal
     ADD CONSTRAINT tbljournal_id_line PRIMARY KEY (id_line);
+
+
+
+--
+-- Name: tbljournal_type tbljournal_type_type_journal; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tbljournal_type
+    ADD CONSTRAINT tbljournal_type_type_journal PRIMARY KEY (type_journal);
+
+
+--
+-- Name: tblndf_bareme tblndf_bareme_id_client_fiscal_year_vehicule_puissance; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_bareme
+    ADD CONSTRAINT tblndf_bareme_id_client_fiscal_year_vehicule_puissance PRIMARY KEY (id_client, fiscal_year, vehicule, puissance);
+
+
+--
+-- Name: tblndf_detail tblndf_detail_pkey; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_detail
+    ADD CONSTRAINT tblndf_detail_pkey PRIMARY KEY (frais_line);
+
+
+--
+-- Name: tblndf_frais tblndf_frais_id_client_fiscal_year_intitule_compte_tva; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_frais
+    ADD CONSTRAINT tblndf_frais_id_client_fiscal_year_intitule_compte_tva PRIMARY KEY (id_client, fiscal_year, intitule, compte, tva);
+
+
+--
+-- Name: tblndf tblndf_id_client_fiscal_year_piece_ref; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf
+    ADD CONSTRAINT tblndf_id_client_fiscal_year_piece_ref PRIMARY KEY (id_client, fiscal_year, piece_ref);
+
+
+--
+-- Name: tblndf_vehicule tblndf_vehicule_id_client_fiscal_year_vehicule_puissance_vehicu; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_vehicule
+    ADD CONSTRAINT tblndf_vehicule_id_client_fiscal_year_vehicule_puissance_vehicu UNIQUE (id_client, fiscal_year, vehicule, puissance, vehicule_name);
+
+
+--
+-- Name: tblndf_vehicule tblndf_vehicule_id_vehicule_id_client_fiscal_year; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_vehicule
+    ADD CONSTRAINT tblndf_vehicule_id_vehicule_id_client_fiscal_year PRIMARY KEY (id_vehicule, id_client, fiscal_year);
+
 
 
 --
@@ -1421,6 +1574,118 @@ ALTER TABLE ONLY public.tbljournal_liste
 
 ALTER TABLE ONLY public.tbllocked_month
     ADD CONSTRAINT tbllocked_month_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON DELETE CASCADE;
+
+
+--
+-- Name: tblndf_bareme tblndf_bareme_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_bareme
+    ADD CONSTRAINT tblndf_bareme_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblndf_detail tblndf_detail_id_client_fiscal_year_piece_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_detail
+    ADD CONSTRAINT tblndf_detail_id_client_fiscal_year_piece_ref_fkey FOREIGN KEY (id_client, fiscal_year, piece_ref) REFERENCES public.tblndf(id_client, fiscal_year, piece_ref) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: tblndf_frais tblndf_frais_id_client_fiscal_year_compte_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_frais
+    ADD CONSTRAINT tblndf_frais_id_client_fiscal_year_compte_fkey FOREIGN KEY (id_client, fiscal_year, compte) REFERENCES public.tblcompte(id_client, fiscal_year, numero_compte) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblndf_frais tblndf_frais_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_frais
+    ADD CONSTRAINT tblndf_frais_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblndf_detail tblndf_id_client_fiscal_year_frais_compte_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_detail
+    ADD CONSTRAINT tblndf_id_client_fiscal_year_frais_compte_fkey FOREIGN KEY (id_client, fiscal_year, frais_compte) REFERENCES public.tblcompte(id_client, fiscal_year, numero_compte) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblndf tblndf_id_client_fiscal_year_id_vehicule_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf
+    ADD CONSTRAINT tblndf_id_client_fiscal_year_id_vehicule_fkey FOREIGN KEY (id_client, fiscal_year, id_vehicule) REFERENCES public.tblndf_vehicule(id_client, fiscal_year, id_vehicule);
+
+
+--
+-- Name: tblndf tblndf_id_client_fiscal_year_piece_compte_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf
+    ADD CONSTRAINT tblndf_id_client_fiscal_year_piece_compte_fkey FOREIGN KEY (id_client, fiscal_year, piece_compte) REFERENCES public.tblcompte(id_client, fiscal_year, numero_compte);
+
+
+--
+-- Name: tblndf_detail tblndf_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_detail
+    ADD CONSTRAINT tblndf_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client);
+
+
+--
+-- Name: tblndf tblndf_id_client_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf
+    ADD CONSTRAINT tblndf_id_client_fkey1 FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client);
+
+
+--
+-- Name: tblndf_detail tblndf_id_client_frais_doc_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_detail
+    ADD CONSTRAINT tblndf_id_client_frais_doc_fkey FOREIGN KEY (id_client, frais_doc) REFERENCES public.tbldocuments(id_client, id_name) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblndf_vehicule tblndf_vehicule_id_client_documents_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_vehicule
+    ADD CONSTRAINT tblndf_vehicule_id_client_documents_fkey FOREIGN KEY (id_client, documents) REFERENCES public.tbldocuments(id_client, id_name) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblndf_vehicule tblndf_vehicule_id_client_fiscal_year_numero_compte_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_vehicule
+    ADD CONSTRAINT tblndf_vehicule_id_client_fiscal_year_numero_compte_fkey FOREIGN KEY (id_client, fiscal_year, numero_compte) REFERENCES public.tblcompte(id_client, fiscal_year, numero_compte) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblndf_vehicule tblndf_vehicule_id_client_fiscal_year_vehicule_puissance_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_vehicule
+    ADD CONSTRAINT tblndf_vehicule_id_client_fiscal_year_vehicule_puissance_fkey FOREIGN KEY (id_client, fiscal_year, vehicule, puissance) REFERENCES public.tblndf_bareme(id_client, fiscal_year, vehicule, puissance) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblndf_vehicule tblndf_vehicule_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblndf_vehicule
+    ADD CONSTRAINT tblndf_vehicule_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE;
 
 
 --
