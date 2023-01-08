@@ -19,7 +19,7 @@ locale-gen fr_FR.UTF-8
 RUN apt-get update && apt-get install -q -y \
 	openssh-server sudo apache2 \
 	php php-pgsql php-mbstring \
-	libapache-dbi-perl libapache2-request-perl \
+	libapache-dbi-perl libapache2-request-perl libpdf-api2-perl \
 	libdbd-pg-perl libapache-session-perl libmime-tools-perl vim && \
 	apt-get update && apt-get install -q -y \
 	postgresql && \
