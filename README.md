@@ -27,7 +27,7 @@ La version disponible ici est une version modifiée avec de nouvelles fonctionna
 ********************************************************************************************************
 Vous pouvez tester le logiciel sur l'instance de test ci-dessous (username superadmin password: admin) :
 
-https://comptalibremen-prod-compta-libremen-com-44dvll.mo6.mogenius.io/base/
+https://141.145.202.135/base/
 
 ********************************************************************************************************
 
