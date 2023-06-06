@@ -36,6 +36,7 @@ Le [WIKI](https://github.com/picsou83/compta.libremen.com/wiki) vous fournit tou
 
 * [Home](https://github.com/picsou83/compta.libremen.com/wiki/Home)
   * [Installation](https://github.com/picsou83/compta.libremen.com/wiki/Home)
+    * [Cloud => Installation gratuite](https://github.com/picsou83/compta.libremen.com/wiki/Cloud-installation-gratuite)
     * [Linux => Installation Hub Docker](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-Hub-Docker)
     * [Linux => Installation Dockerfile](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-Dockerfile)
     * [Linux => Installation manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-manuelle)
