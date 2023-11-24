@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-sudo tar -xpzf /tmp/comptalibre-server.tar.gz -C / --keep-newer-files
-
 echo "Démarrage de postgresql ..."
 service postgresql start 
 
