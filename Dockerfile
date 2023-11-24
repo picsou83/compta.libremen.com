@@ -56,6 +56,9 @@ RUN sed -ri 's/ServerTokens OS/ServerTokens Prod/' /etc/apache2/*/security.conf 
 	sudo a2dismod status
 EXPOSE 80
 
+# Extrait le fichier comptalibre-server.tar.gz
+RUN tar -xpzf /tmp/comptalibre-server.tar.gz -C / --keep-newer-files
+
 # RÉPERTOIRE DE TRAVAIL
 WORKDIR /var/www/html
 
