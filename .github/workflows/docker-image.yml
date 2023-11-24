@@ -33,7 +33,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+          
+      - name: Remove old comptalibre-server.tar.gz
+        run: rm -f comptalibre-server.tar.gz
+      
       - name: Move comptalibre-server.tar.gz to build context
         run: mv comptalibre-server.tar.gz ${{ github.workspace }}
           
