@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -q -y \
 	openssh-server sudo apache2 \
 	php php-pgsql php-mbstring \
 	libapache-dbi-perl libapache2-request-perl libpdf-api2-perl \
-	libdbd-pg-perl libapache-session-perl libmime-tools-perl vim && \
+	libdbd-pg-perl libapache-session-perl libmime-tools-perl vim poppler-utils && \
 	apt-get update && apt-get install -q -y \
 	postgresql && \
 	apt-get clean && \ 
