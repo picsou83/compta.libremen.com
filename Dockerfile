@@ -18,19 +18,25 @@ locale-gen fr_FR.UTF-8
 # INSTALLATION DES PACKETS
 RUN apt-get update && apt-get install -q -y \
 	openssh-server sudo apache2 \
-	php php-pgsql php-mbstring \
+	php php-pgsql php-mbstring cpanminus \
 	libapache-dbi-perl libapache2-request-perl libpdf-api2-perl \
-	libdbd-pg-perl libapache-session-perl libmime-tools-perl vim poppler-utils && \
+	libemail-sender-perl libemail-simple-perl \
+	libdbd-pg-perl libapache-session-perl libmime-tools-perl vim poppler-utils supervisor && \
 	apt-get update && apt-get install -q -y \
 	postgresql && \
 	apt-get clean && \ 
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+	
+# INSTALLATION DE MODULE PERL À L'AIDE DE CPAN
+RUN cpanm Net::OAuth2::Profile::WebServer Email::Sender::Transport::SMTP::TLS
 
 # COPIE DES FICHIERS LOCAUX
 COPY adminer.php ${DOCUMENTROOT}
 COPY compta.conf /etc/apache2/sites-available
+COPY wsl.conf /etc/
 COPY compta.sql /tmp/
 COPY comptalibre-server.tar.gz /tmp/
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD create.sh /create.sh
 ADD start.sh /start.sh
 RUN ln -s /etc/apache2/sites-available/compta.conf /etc/apache2/sites-enabled/
@@ -42,6 +48,9 @@ RUN sed -ri 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh
 	sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
 	mkdir -p /var/run/sshd
 EXPOSE 22
+
+# Décommenter et ajouter l'adresse IPv4 '127.0.0.1' dans le fichier postgresql.conf
+RUN sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '127.0.0.1'/g" /etc/postgresql/13/main/postgresql.conf
 
 # PREPARATION APACHE
 RUN sed -ri 's/ServerTokens OS/ServerTokens Prod/' /etc/apache2/*/security.conf && \
@@ -63,4 +72,5 @@ WORKDIR /var/www/html
 RUN ["/create.sh"]
 
 # EXECUTION DU SCRIPT ET DES SERVICES AU DEMARRAGE DU CONTENEUR
-ENTRYPOINT /start.sh && service postgresql start && /usr/sbin/sshd && apache2ctl -D FOREGROUND
+ENTRYPOINT ["/bin/sh", "-c", "/start.sh && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
+

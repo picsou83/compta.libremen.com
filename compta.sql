@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.7 (Debian 13.7-0+deb11u1)
--- Dumped by pg_dump version 13.7 (Debian 13.7-0+deb11u1)
+-- Dumped from database version 13.13 (Debian 13.13-0+deb11u1)
+-- Dumped by pg_dump version 13.13 (Debian 13.13-0+deb11u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,41 +17,99 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+--
+-- Name: unaccent; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION unaccent; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
+
+
+--
 -- Name: calcul_balance(integer, integer, date, integer, integer, text); Type: FUNCTION; Schema: public; Owner: compta
 --
 
 CREATE FUNCTION public.calcul_balance(integer, integer, date, integer, integer, text, OUT numero_compte text, OUT classe text, OUT libelle_compte text, OUT debit text, OUT credit text, OUT solde_debit text, OUT solde_credit text, OUT classe_total_debit text, OUT classe_total_credit text, OUT classe_total_debit_solde text, OUT classe_total_credit_solde text, OUT grand_total_debit text, OUT grand_total_credit text, OUT grand_total_debit_solde text, OUT grand_total_credit_solde text, OUT classe_total_credit_solde_dif text, OUT classe_total_debit_solde_dif text) RETURNS SETOF record
     LANGUAGE sql STABLE
-    AS $_$
-	    with t1 as (
-SELECT numero_compte, sum(debit)/100::numeric as debit, sum(credit)/100::numeric as credit, sum(credit - debit)/100::numeric as solde, substring(numero_compte from '^.') as classe
-FROM tbljournal 
-WHERE id_client = $1 AND fiscal_year = $2 and date_ecriture <= $3 AND libelle_journal NOT LIKE '%CLOTURE%'
-GROUP BY numero_compte 
-	    ),
-	    t2 as (
-SELECT numero_compte, substring(numero_compte from '^.') as classe, libelle_compte
-FROM tblcompte t2
-WHERE id_client = $4 AND fiscal_year = $5
-	    ),
-	    t3 as (
-SELECT t2.numero_compte, t2.classe, t2.libelle_compte, coalesce(t1.debit, 0) as debit, coalesce(t1.credit, 0) as credit, coalesce(t1.solde, 0) as solde
-FROM t2 LEFT JOIN t1 ON t1.numero_compte = t2.numero_compte
-	    ),
-	    t4 as (
-SELECT t3.numero_compte, t3.classe, t3.libelle_compte, t3.debit as debit, t3.credit as credit, -least(0, t3.solde) as solde_debit, greatest(0, t3.solde) as solde_credit
-FROM t3
-	    ), 
-	    t5 as (
-SELECT t4.numero_compte, t4.classe, t4.libelle_compte, t4.debit, t4.credit, t4.solde_debit, t4.solde_credit, 
-sum(t4.debit) over (partition by t4.classe) as classe_total_debit, sum(t4.credit) over (partition by t4.classe) as classe_total_credit, sum(t4.solde_debit) over (partition by t4.classe) as classe_total_debit_solde, sum(t4.solde_credit) over (partition by t4.classe) as classe_total_credit_solde, greatest(0, sum(t4.credit - t4.debit) over (partition by t4.classe)) as classe_total_credit_solde_dif, greatest(0,sum(t4.debit - t4.credit) over (partition by t4.classe)) as classe_total_debit_solde_dif
-FROM t4
-	    )
-	    SELECT t5.numero_compte, t5.classe, t5.libelle_compte, 
-	    to_char(t5.debit, $6) as debit, to_char(t5.credit, $6) as credit, to_char(t5.solde_debit, $6) as solde_debit, to_char(t5.solde_credit, $6) as solde_credit, 
-	    to_char(t5.classe_total_debit, $6) as classe_total_debit, to_char(t5.classe_total_credit, $6) as classe_total_credit, to_char(t5.classe_total_debit_solde, $6) as classe_total_debit_solde, to_char(t5.classe_total_credit_solde, $6) as classe_total_credit_solde, to_char(sum(t5.debit) over (), $6) as grand_total_credit, to_char(sum(t5.credit) over (), $6) as grand_total_debit, to_char(sum(t5.solde_debit) over (), $6) as grand_total_debit_solde, to_char(sum(t5.solde_credit) over (), $6) as grand_total_credit_solde, to_char(t5.classe_total_credit_solde_dif, $6) as classe_total_credit_solde_dif, to_char(t5.classe_total_debit_solde_dif, $6) as classe_total_debit_solde_dif
-	    FROM t5 
-	    ORDER by numero_compte;
+    AS $_$
+
+	    with t1 as (
+
+SELECT numero_compte, sum(debit)/100::numeric as debit, sum(credit)/100::numeric as credit, sum(credit - debit)/100::numeric as solde, substring(numero_compte from '^.') as classe
+
+FROM tbljournal 
+
+WHERE id_client = $1 AND fiscal_year = $2 and date_ecriture <= $3 AND libelle_journal NOT LIKE '%CLOTURE%'
+
+GROUP BY numero_compte 
+
+	    ),
+
+	    t2 as (
+
+SELECT numero_compte, substring(numero_compte from '^.') as classe, libelle_compte
+
+FROM tblcompte t2
+
+WHERE id_client = $4 AND fiscal_year = $5
+
+	    ),
+
+	    t3 as (
+
+SELECT t2.numero_compte, t2.classe, t2.libelle_compte, coalesce(t1.debit, 0) as debit, coalesce(t1.credit, 0) as credit, coalesce(t1.solde, 0) as solde
+
+FROM t2 LEFT JOIN t1 ON t1.numero_compte = t2.numero_compte
+
+	    ),
+
+	    t4 as (
+
+SELECT t3.numero_compte, t3.classe, t3.libelle_compte, t3.debit as debit, t3.credit as credit, -least(0, t3.solde) as solde_debit, greatest(0, t3.solde) as solde_credit
+
+FROM t3
+
+	    ), 
+
+	    t5 as (
+
+SELECT t4.numero_compte, t4.classe, t4.libelle_compte, t4.debit, t4.credit, t4.solde_debit, t4.solde_credit, 
+
+sum(t4.debit) over (partition by t4.classe) as classe_total_debit, sum(t4.credit) over (partition by t4.classe) as classe_total_credit, sum(t4.solde_debit) over (partition by t4.classe) as classe_total_debit_solde, sum(t4.solde_credit) over (partition by t4.classe) as classe_total_credit_solde, greatest(0, sum(t4.credit - t4.debit) over (partition by t4.classe)) as classe_total_credit_solde_dif, greatest(0,sum(t4.debit - t4.credit) over (partition by t4.classe)) as classe_total_debit_solde_dif
+
+FROM t4
+
+	    )
+
+	    SELECT t5.numero_compte, t5.classe, t5.libelle_compte, 
+
+	    to_char(t5.debit, $6) as debit, to_char(t5.credit, $6) as credit, to_char(t5.solde_debit, $6) as solde_debit, to_char(t5.solde_credit, $6) as solde_credit, 
+
+	    to_char(t5.classe_total_debit, $6) as classe_total_debit, to_char(t5.classe_total_credit, $6) as classe_total_credit, to_char(t5.classe_total_debit_solde, $6) as classe_total_debit_solde, to_char(t5.classe_total_credit_solde, $6) as classe_total_credit_solde, to_char(sum(t5.debit) over (), $6) as grand_total_credit, to_char(sum(t5.credit) over (), $6) as grand_total_debit, to_char(sum(t5.solde_debit) over (), $6) as grand_total_debit_solde, to_char(sum(t5.solde_credit) over (), $6) as grand_total_credit_solde, to_char(t5.classe_total_credit_solde_dif, $6) as classe_total_credit_solde_dif, to_char(t5.classe_total_debit_solde_dif, $6) as classe_total_debit_solde_dif
+
+	    FROM t5 
+
+	    ORDER by numero_compte;
+
 $_$;
 
 
@@ -63,36 +121,66 @@ ALTER FUNCTION public.calcul_balance(integer, integer, date, integer, integer, t
 
 CREATE FUNCTION public.calcul_balance_cloture(integer, integer, date, integer, integer, text, OUT numero_compte text, OUT classe text, OUT libelle_compte text, OUT debit text, OUT credit text, OUT solde_debit text, OUT solde_credit text, OUT classe_total_debit text, OUT classe_total_credit text, OUT classe_total_debit_solde text, OUT classe_total_credit_solde text, OUT grand_total_debit text, OUT grand_total_credit text, OUT grand_total_debit_solde text, OUT grand_total_credit_solde text, OUT classe_total_credit_solde_dif text, OUT classe_total_debit_solde_dif text) RETURNS SETOF record
     LANGUAGE sql STABLE
-    AS $_$
-	    with t1 as (
-SELECT numero_compte, sum(debit)/100::numeric as debit, sum(credit)/100::numeric as credit, sum(credit - debit)/100::numeric as solde, substring(numero_compte from '^.') as classe
-FROM tbljournal 
-WHERE id_client = $1 AND fiscal_year = $2 and date_ecriture <= $3
-GROUP BY numero_compte 
-	    ),
-	    t2 as (
-SELECT numero_compte, substring(numero_compte from '^.') as classe, libelle_compte
-FROM tblcompte t2
-WHERE id_client = $4 AND fiscal_year = $5
-	    ),
-	    t3 as (
-SELECT t2.numero_compte, t2.classe, t2.libelle_compte, coalesce(t1.debit, 0) as debit, coalesce(t1.credit, 0) as credit, coalesce(t1.solde, 0) as solde
-FROM t2 LEFT JOIN t1 ON t1.numero_compte = t2.numero_compte
-	    ),
-	    t4 as (
-SELECT t3.numero_compte, t3.classe, t3.libelle_compte, t3.debit as debit, t3.credit as credit, -least(0, t3.solde) as solde_debit, greatest(0, t3.solde) as solde_credit
-FROM t3
-	    ), 
-	    t5 as (
-SELECT t4.numero_compte, t4.classe, t4.libelle_compte, t4.debit, t4.credit, t4.solde_debit, t4.solde_credit, 
-sum(t4.debit) over (partition by t4.classe) as classe_total_debit, sum(t4.credit) over (partition by t4.classe) as classe_total_credit, sum(t4.solde_debit) over (partition by t4.classe) as classe_total_debit_solde, sum(t4.solde_credit) over (partition by t4.classe) as classe_total_credit_solde, greatest(0, sum(t4.credit - t4.debit) over (partition by t4.classe)) as classe_total_credit_solde_dif, greatest(0,sum(t4.debit - t4.credit) over (partition by t4.classe)) as classe_total_debit_solde_dif
-FROM t4
-	    )
-	    SELECT t5.numero_compte, t5.classe, t5.libelle_compte, 
-	    to_char(t5.debit, $6) as debit, to_char(t5.credit, $6) as credit, to_char(t5.solde_debit, $6) as solde_debit, to_char(t5.solde_credit, $6) as solde_credit, 
-	    to_char(t5.classe_total_debit, $6) as classe_total_debit, to_char(t5.classe_total_credit, $6) as classe_total_credit, to_char(t5.classe_total_debit_solde, $6) as classe_total_debit_solde, to_char(t5.classe_total_credit_solde, $6) as classe_total_credit_solde, to_char(sum(t5.debit) over (), $6) as grand_total_credit, to_char(sum(t5.credit) over (), $6) as grand_total_debit, to_char(sum(t5.solde_debit) over (), $6) as grand_total_debit_solde, to_char(sum(t5.solde_credit) over (), $6) as grand_total_credit_solde, to_char(t5.classe_total_credit_solde_dif, $6) as classe_total_credit_solde_dif, to_char(t5.classe_total_debit_solde_dif, $6) as classe_total_debit_solde_dif
-	    FROM t5 
-	    ORDER by numero_compte;
+    AS $_$
+
+	    with t1 as (
+
+SELECT numero_compte, sum(debit)/100::numeric as debit, sum(credit)/100::numeric as credit, sum(credit - debit)/100::numeric as solde, substring(numero_compte from '^.') as classe
+
+FROM tbljournal 
+
+WHERE id_client = $1 AND fiscal_year = $2 and date_ecriture <= $3
+
+GROUP BY numero_compte 
+
+	    ),
+
+	    t2 as (
+
+SELECT numero_compte, substring(numero_compte from '^.') as classe, libelle_compte
+
+FROM tblcompte t2
+
+WHERE id_client = $4 AND fiscal_year = $5
+
+	    ),
+
+	    t3 as (
+
+SELECT t2.numero_compte, t2.classe, t2.libelle_compte, coalesce(t1.debit, 0) as debit, coalesce(t1.credit, 0) as credit, coalesce(t1.solde, 0) as solde
+
+FROM t2 LEFT JOIN t1 ON t1.numero_compte = t2.numero_compte
+
+	    ),
+
+	    t4 as (
+
+SELECT t3.numero_compte, t3.classe, t3.libelle_compte, t3.debit as debit, t3.credit as credit, -least(0, t3.solde) as solde_debit, greatest(0, t3.solde) as solde_credit
+
+FROM t3
+
+	    ), 
+
+	    t5 as (
+
+SELECT t4.numero_compte, t4.classe, t4.libelle_compte, t4.debit, t4.credit, t4.solde_debit, t4.solde_credit, 
+
+sum(t4.debit) over (partition by t4.classe) as classe_total_debit, sum(t4.credit) over (partition by t4.classe) as classe_total_credit, sum(t4.solde_debit) over (partition by t4.classe) as classe_total_debit_solde, sum(t4.solde_credit) over (partition by t4.classe) as classe_total_credit_solde, greatest(0, sum(t4.credit - t4.debit) over (partition by t4.classe)) as classe_total_credit_solde_dif, greatest(0,sum(t4.debit - t4.credit) over (partition by t4.classe)) as classe_total_debit_solde_dif
+
+FROM t4
+
+	    )
+
+	    SELECT t5.numero_compte, t5.classe, t5.libelle_compte, 
+
+	    to_char(t5.debit, $6) as debit, to_char(t5.credit, $6) as credit, to_char(t5.solde_debit, $6) as solde_debit, to_char(t5.solde_credit, $6) as solde_credit, 
+
+	    to_char(t5.classe_total_debit, $6) as classe_total_debit, to_char(t5.classe_total_credit, $6) as classe_total_credit, to_char(t5.classe_total_debit_solde, $6) as classe_total_debit_solde, to_char(t5.classe_total_credit_solde, $6) as classe_total_credit_solde, to_char(sum(t5.debit) over (), $6) as grand_total_credit, to_char(sum(t5.credit) over (), $6) as grand_total_debit, to_char(sum(t5.solde_debit) over (), $6) as grand_total_debit_solde, to_char(sum(t5.solde_credit) over (), $6) as grand_total_credit_solde, to_char(t5.classe_total_credit_solde_dif, $6) as classe_total_credit_solde_dif, to_char(t5.classe_total_debit_solde_dif, $6) as classe_total_debit_solde_dif
+
+	    FROM t5 
+
+	    ORDER by numero_compte;
+
 $_$;
 
 
@@ -105,12 +193,18 @@ ALTER FUNCTION public.calcul_balance_cloture(integer, integer, date, integer, in
 CREATE FUNCTION public.date_is_in_fiscal_year(arg_date date, fiscal_year_start date, fiscal_year_end date) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
-BEGIN
-IF ( arg_date BETWEEN fiscal_year_start AND fiscal_year_end ) THEN RETURN TRUE;
-ELSE
-RETURN FALSE;
-END IF;
-END 
+BEGIN
+
+IF ( arg_date BETWEEN fiscal_year_start AND fiscal_year_end ) THEN RETURN TRUE;
+
+ELSE
+
+RETURN FALSE;
+
+END IF;
+
+END 
+
 $$;
 
 
@@ -123,11 +217,16 @@ ALTER FUNCTION public.date_is_in_fiscal_year(arg_date date, fiscal_year_start da
 CREATE FUNCTION public.date_is_in_fiscal_year_2(arg_date date, fiscal_year_start date, fiscal_year_end date) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
-BEGIN
-IF ( arg_date BETWEEN fiscal_year_start AND fiscal_year_end ) THEN RETURN TRUE;
-ELSE
-RETURN FALSE;
-END IF;
+BEGIN
+
+IF ( arg_date BETWEEN fiscal_year_start AND fiscal_year_end ) THEN RETURN TRUE;
+
+ELSE
+
+RETURN FALSE;
+
+END IF;
+
 END $$;
 
 
@@ -145,6 +244,15 @@ delete from tbllocked_month where id_client = $1;
 delete from tblexport where id_client = $1;	
 delete from tbljournal where id_client = $1;
 delete from tbljournal_liste where id_client = $1;
+delete from tblbilan_detail where id_client = $1;
+delete from tblbilan_code where id_client = $1;
+delete from tblbilan where id_client = $1;
+delete from tblimmobilier_locataire where id_client = $1;
+delete from tblimmobilier where id_client = $1;
+delete from tblimmobilier_logement where id_client = $1;
+delete from tblndf where id_client = $1;
+delete from tblndf_vehicule where id_client = $1;
+delete from tblndf_bareme where id_client = $1;
 delete from tbldocuments where id_client = $1;
 delete from tbldocuments_categorie where id_client = $1;
 delete from tblcompte where id_client = $1;
@@ -166,61 +274,116 @@ ALTER FUNCTION public.delete_account_data(id_client integer) OWNER TO compta;
 CREATE FUNCTION public.import_staging(my_token_id text, my_fiscal_year integer, "my_Exercice_debut_YMD" date, "my_Exercice_fin_YMD" date) RETURNS void
     LANGUAGE plpgsql
     AS $_$
-BEGIN
--- vérifier que le total global est équilibré
-IF ( not (select sum(credit-debit) from tbljournal_import where _token_id = $1) = 0 ) then RAISE EXCEPTION 'unbalanced total'; END IF;
--- supprimer les champs où débit et crédit sont nulls
-delete from tbljournal_import where coalesce(debit, 0) + coalesce(credit, 0) = 0 and _token_id = $1;
--- multiplier par 100 les valeurs en euros, pour les enregistrer en centimes
-update tbljournal_import set debit = debit * 100, credit = credit * 100 where _token_id = $1;
-
---vérifier que les dates sont bien dans l'exercice
-if exists (select date_ecriture, id_client
-from tbljournal_import
-where _token_id = $1 and date_is_in_fiscal_year(date_ecriture, $3, $4) = FALSE
-)
-then raise exception 'bad fiscal year';
-end if;
-
---vérifier que les numéros de mouvement n'existe pas déjà dans l'exercice
-if exists ( select t1.num_mouvement
-from tbljournal_import t1 inner join tbljournal t2 using (id_client, fiscal_year) 
-where t1.num_mouvement::integer != t2.num_mouvement::integer ) 
-then RAISE exception 'bad num mouvement';
-END IF ;
-
--- vérifier que les groupes sont à l'équilibre
-if exists (select date_ecriture, id_facture, fiscal_year, id_client, libelle_journal
-from tbljournal_import
-where _token_id = $1
-group by date_ecriture, id_facture, fiscal_year, id_client, libelle_journal
-having sum(credit-debit) != 0 )
-then RAISE EXCEPTION 'unbalanced group';
-end if;
--- générer les id_entry par écriture
-with t1 as (
-select num_mouvement, date_ecriture, id_paiement, id_facture, fiscal_year, id_client, libelle_journal
-from tbljournal_import
-where _token_id = $1
-group by num_mouvement, date_ecriture, id_paiement, id_facture, fiscal_year, id_client, libelle_journal
-ORDER BY num_mouvement, date_ecriture
-),
-t2 as (
-select nextval('tbljournal_id_entry_seq'::regclass) as my_id_entry, date_ecriture as my_date_ecriture, id_paiement as my_id_paiement, id_facture as my_id_facture, fiscal_year as my_fiscal_year, id_client as my_id_client, libelle_journal as my_libelle_journal
-from t1
-)
-update tbljournal_import set id_entry = t2.my_id_entry
-from t2
-where date_ecriture = t2.my_date_ecriture and (id_facture = t2.my_id_facture or id_facture is null) and (id_paiement = t2.my_id_paiement or id_paiement is null) and fiscal_year = t2.my_fiscal_year and id_client = t2.my_id_client and libelle_journal = t2.my_libelle_journal;
-
--- pratiquer l'insertion proprement dite
-insert into tbljournal (date_ecriture, id_facture, libelle, debit, credit, lettrage, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, pointage, id_export, documents1, documents2, num_mouvement)
-select date_ecriture, id_facture, libelle, debit, credit, lettrage, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, pointage, id_export, documents1, documents2, num_mouvement
-from tbljournal_import
-where _token_id = $1;
--- si l'insertion s'est bien passée, on vide tbljournal_import
-delete from tbljournal_import where _token_id = $1;
-END;
+BEGIN
+
+-- vérifier que le total global est équilibré
+
+IF ( not (select sum(credit-debit) from tbljournal_import where _token_id = $1) = 0 ) then RAISE EXCEPTION 'unbalanced total'; END IF;
+
+-- supprimer les champs où débit et crédit sont nulls
+
+delete from tbljournal_import where coalesce(debit, 0) + coalesce(credit, 0) = 0 and _token_id = $1;
+
+-- multiplier par 100 les valeurs en euros, pour les enregistrer en centimes
+
+update tbljournal_import set debit = debit * 100, credit = credit * 100 where _token_id = $1;
+
+
+
+--vérifier que les dates sont bien dans l'exercice
+
+if exists (select date_ecriture, id_client
+
+from tbljournal_import
+
+where _token_id = $1 and date_is_in_fiscal_year(date_ecriture, $3, $4) = FALSE
+
+)
+
+then raise exception 'bad fiscal year';
+
+end if;
+
+
+
+--vérifier que les numéros de mouvement n'existe pas déjà dans l'exercice
+
+if exists ( select t1.num_mouvement
+
+from tbljournal_import t1 inner join tbljournal t2 using (id_client, fiscal_year) 
+
+where t1.num_mouvement::integer != t2.num_mouvement::integer ) 
+
+then RAISE exception 'bad num mouvement';
+
+END IF ;
+
+
+
+-- vérifier que les groupes sont à l'équilibre
+
+if exists (select date_ecriture, id_facture, fiscal_year, id_client, libelle_journal
+
+from tbljournal_import
+
+where _token_id = $1
+
+group by date_ecriture, id_facture, fiscal_year, id_client, libelle_journal
+
+having sum(credit-debit) != 0 )
+
+then RAISE EXCEPTION 'unbalanced group';
+
+end if;
+
+-- générer les id_entry par écriture
+
+with t1 as (
+
+select num_mouvement, date_ecriture, id_paiement, id_facture, fiscal_year, id_client, libelle_journal
+
+from tbljournal_import
+
+where _token_id = $1
+
+group by num_mouvement, date_ecriture, id_paiement, id_facture, fiscal_year, id_client, libelle_journal
+
+ORDER BY num_mouvement, date_ecriture
+
+),
+
+t2 as (
+
+select nextval('tbljournal_id_entry_seq'::regclass) as my_id_entry, date_ecriture as my_date_ecriture, id_paiement as my_id_paiement, id_facture as my_id_facture, fiscal_year as my_fiscal_year, id_client as my_id_client, libelle_journal as my_libelle_journal
+
+from t1
+
+)
+
+update tbljournal_import set id_entry = t2.my_id_entry
+
+from t2
+
+where date_ecriture = t2.my_date_ecriture and (id_facture = t2.my_id_facture or id_facture is null) and (id_paiement = t2.my_id_paiement or id_paiement is null) and fiscal_year = t2.my_fiscal_year and id_client = t2.my_id_client and libelle_journal = t2.my_libelle_journal;
+
+
+
+-- pratiquer l'insertion proprement dite
+
+insert into tbljournal (date_ecriture, id_facture, libelle, debit, credit, lettrage, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, pointage, id_export, documents1, documents2, num_mouvement)
+
+select date_ecriture, id_facture, libelle, debit, credit, lettrage, id_entry, id_paiement, numero_compte, fiscal_year, id_client, libelle_journal, pointage, id_export, documents1, documents2, num_mouvement
+
+from tbljournal_import
+
+where _token_id = $1;
+
+-- si l'insertion s'est bien passée, on vide tbljournal_import
+
+delete from tbljournal_import where _token_id = $1;
+
+END;
+
 $_$;
 
 
@@ -294,7 +457,7 @@ ALTER FUNCTION public.tblcerfa_2_detail_check_numero_compte() OWNER TO compta;
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: tblcompte; Type: TABLE; Schema: public; Owner: compta
@@ -358,9 +521,12 @@ ALTER FUNCTION public.tbljournal_check_month_is_archived() OWNER TO compta;
 CREATE FUNCTION public.tbljournal_staging_check_fiscal_year() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
-BEGIN
-if ( not date_is_in_fiscal_year(new.date_ecriture, old.fiscal_year_start, old.fiscal_year_end) )
-THEN RAISE EXCEPTION 'bad fiscal year';
+BEGIN
+
+if ( not date_is_in_fiscal_year(new.date_ecriture, old.fiscal_year_start, old.fiscal_year_end) )
+
+THEN RAISE EXCEPTION 'bad fiscal year';
+
 ELSE RETURN NEW; END IF ; END $$;
 
 
@@ -407,7 +573,9 @@ CREATE TABLE public.compta_client (
     default_banque_compte text,
     default_divers_journal text,
     default_divers_compte text,
-    type_compta text DEFAULT 'engagement'::text NOT NULL
+    type_compta text DEFAULT 'engagement'::text NOT NULL,
+    immobilier boolean DEFAULT false NOT NULL,
+    courriel text
 );
 
 
@@ -467,6 +635,63 @@ CREATE TABLE public.sessions (
 ALTER TABLE public.sessions OWNER TO compta;
 
 --
+-- Name: tblbilan; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblbilan (
+    id_client integer NOT NULL,
+    bilan_form text NOT NULL,
+    bilan_desc text,
+    bilan_doc text,
+    bilan_width integer,
+    bilan_height integer,
+    bilan_disp boolean DEFAULT false
+);
+
+
+ALTER TABLE public.tblbilan OWNER TO compta;
+
+--
+-- Name: tblbilan_code; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblbilan_code (
+    id_client integer NOT NULL,
+    formulaire text NOT NULL,
+    code text NOT NULL,
+    exercice text NOT NULL,
+    description text,
+    title text,
+    style_top integer,
+    style_left integer,
+    style_width integer,
+    style_height integer
+);
+
+
+ALTER TABLE public.tblbilan_code OWNER TO compta;
+
+--
+-- Name: tblbilan_detail; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblbilan_detail (
+    id_client integer NOT NULL,
+    formulaire text NOT NULL,
+    code text NOT NULL,
+    compte_mini text NOT NULL,
+    compte_maxi text NOT NULL,
+    compte_journal text,
+    solde_type text NOT NULL,
+    si_debit boolean DEFAULT false,
+    si_credit boolean DEFAULT false,
+    si_soustraire boolean DEFAULT false
+);
+
+
+ALTER TABLE public.tblbilan_detail OWNER TO compta;
+
+--
 -- Name: tblcerfa_2; Type: TABLE; Schema: public; Owner: compta
 --
 
@@ -523,7 +748,8 @@ CREATE TABLE public.tblconfig_liste (
     config_libelle text NOT NULL,
     config_compte text,
     config_journal text,
-    module text NOT NULL
+    module text NOT NULL,
+    masquer boolean DEFAULT false NOT NULL
 );
 
 
@@ -575,6 +801,19 @@ CREATE TABLE public.tbldocuments_categorie (
 ALTER TABLE public.tbldocuments_categorie OWNER TO compta;
 
 --
+-- Name: tbldocuments_tags; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tbldocuments_tags (
+    id_client integer NOT NULL,
+    tags_nom text NOT NULL,
+    tags_doc text NOT NULL
+);
+
+
+ALTER TABLE public.tbldocuments_tags OWNER TO compta;
+
+--
 -- Name: tblexport; Type: TABLE; Schema: public; Owner: compta
 --
 
@@ -609,6 +848,102 @@ ALTER TABLE public.tblexport_id_export_seq OWNER TO compta;
 
 ALTER SEQUENCE public.tblexport_id_export_seq OWNED BY public.tblexport.id_export;
 
+
+--
+-- Name: tblimmobilier; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblimmobilier (
+    id_client integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    immo_contrat text NOT NULL,
+    immo_libelle text NOT NULL,
+    immo_logement text NOT NULL,
+    immo_locataire text,
+    immo_compte text,
+    immo_loyer integer,
+    immo_depot integer,
+    immo_date1 date,
+    immo_date2 date,
+    immo_entry integer,
+    immo_com1 text,
+    immo_com2 text,
+    immo_archive boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.tblimmobilier OWNER TO compta;
+
+--
+-- Name: tblimmobilier_locataire; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblimmobilier_locataire (
+    id_loc integer NOT NULL,
+    id_client integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    locataires_ref text NOT NULL,
+    locataires_contrat text NOT NULL,
+    locataires_type text NOT NULL,
+    locataires_civilite text NOT NULL,
+    locataires_nom text NOT NULL,
+    locataires_prenom text NOT NULL,
+    locataires_adresse text,
+    locataires_cp integer,
+    locataires_ville text,
+    locataires_naissance_date date,
+    locataires_naissance_lieu text,
+    locataires_telephone text,
+    locataires_courriel text,
+    locataires_com1 text,
+    locataires_com2 text
+);
+
+
+ALTER TABLE public.tblimmobilier_locataire OWNER TO compta;
+
+--
+-- Name: tblimmobilier_locataire_id_loc_seq; Type: SEQUENCE; Schema: public; Owner: compta
+--
+
+CREATE SEQUENCE public.tblimmobilier_locataire_id_loc_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tblimmobilier_locataire_id_loc_seq OWNER TO compta;
+
+--
+-- Name: tblimmobilier_locataire_id_loc_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: compta
+--
+
+ALTER SEQUENCE public.tblimmobilier_locataire_id_loc_seq OWNED BY public.tblimmobilier_locataire.id_loc;
+
+
+--
+-- Name: tblimmobilier_logement; Type: TABLE; Schema: public; Owner: compta
+--
+
+CREATE TABLE public.tblimmobilier_logement (
+    id_client integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    biens_ref text NOT NULL,
+    biens_nom text NOT NULL,
+    biens_adresse text,
+    biens_cp integer,
+    biens_ville text,
+    biens_surface integer,
+    biens_compte text,
+    biens_com1 text,
+    biens_com2 text,
+    biens_archive boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.tblimmobilier_logement OWNER TO compta;
 
 --
 -- Name: tbljournal; Type: TABLE; Schema: public; Owner: compta
@@ -779,7 +1114,6 @@ CREATE TABLE public.tbljournal_type (
 
 
 ALTER TABLE public.tbljournal_type OWNER TO compta;
-
 
 --
 -- Name: tbllocked_month; Type: TABLE; Schema: public; Owner: compta
@@ -986,6 +1320,13 @@ ALTER TABLE ONLY public.tblexport ALTER COLUMN id_export SET DEFAULT nextval('pu
 
 
 --
+-- Name: tblimmobilier_locataire id_loc; Type: DEFAULT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier_locataire ALTER COLUMN id_loc SET DEFAULT nextval('public.tblimmobilier_locataire_id_loc_seq'::regclass);
+
+
+--
 -- Name: tbljournal id_line; Type: DEFAULT; Schema: public; Owner: compta
 --
 
@@ -1010,8 +1351,8 @@ ALTER TABLE ONLY public.tblndf_vehicule ALTER COLUMN id_vehicule SET DEFAULT nex
 -- Data for Name: compta_client; Type: TABLE DATA; Schema: public; Owner: compta
 --
 
-COPY public.compta_client (id_client, etablissement, siret, padding_zeroes, fiscal_year_start, id_tva_periode, id_tva_option, id_tva_regime, adresse_1, adresse_2, code_postal, ville, journal_tva, last_connection_date, date_debut, date_fin, validation, default_cca_journal, default_cca_compte, default_caisse_journal, default_caisse_compte, default_banque_journal, default_banque_compte, default_divers_journal, default_divers_compte, type_compta) FROM stdin;
-1	Compta-Libre	850550550123	3	01-01	mensuelle	encaissements	normal	\N	\N	\N	\N	OD	2022-06-04	2022-01-01	2022-12-31	\N	\N	\N	\N	\N	\N	\N	\N	\N	engagement
+COPY public.compta_client (id_client, etablissement, siret, padding_zeroes, fiscal_year_start, id_tva_periode, id_tva_option, id_tva_regime, adresse_1, adresse_2, code_postal, ville, journal_tva, last_connection_date, date_debut, date_fin, validation, default_cca_journal, default_cca_compte, default_caisse_journal, default_caisse_compte, default_banque_journal, default_banque_compte, default_divers_journal, default_divers_compte, type_compta, immobilier, courriel) FROM stdin;
+1	Compta-Libre	850550550123	3	01-01	mensuelle	encaissements	normal	\N	\N	\N	\N	OD	2024-03-18	2022-01-01	2022-12-31	\N	\N	\N	\N	\N	\N	\N	\N	\N	engagement	f	\N
 \.
 
 
@@ -1023,6 +1364,7 @@ COPY public.compta_user (username, userpass, id_client, preferred_datestyle, nom
 superadmin	admin	1	SQL, dmy	superadmin		1	1	0
 \.
 
+
 --
 -- Data for Name: tbldatestyle; Type: TABLE DATA; Schema: public; Owner: compta
 --
@@ -1032,6 +1374,7 @@ iso	iso
 SQL, dmy	SQL, dmy
 \.
 
+
 --
 -- Data for Name: tbldocuments_categorie; Type: TABLE DATA; Schema: public; Owner: compta
 --
@@ -1040,6 +1383,7 @@ COPY public.tbldocuments_categorie (libelle_cat_doc, id_client) FROM stdin;
 Temp	1
 Inter-exercice	1
 \.
+
 
 --
 -- Data for Name: tbljournal_type; Type: TABLE DATA; Schema: public; Owner: compta
@@ -1053,6 +1397,7 @@ Clôture
 OD
 A-nouveaux
 \.
+
 
 --
 -- Data for Name: tbltva; Type: TABLE DATA; Schema: public; Owner: compta
@@ -1110,6 +1455,13 @@ SELECT pg_catalog.setval('public.tblexport_id_export_seq', 1, false);
 
 
 --
+-- Name: tblimmobilier_locataire_id_loc_seq; Type: SEQUENCE SET; Schema: public; Owner: compta
+--
+
+SELECT pg_catalog.setval('public.tblimmobilier_locataire_id_loc_seq', 1, false);
+
+
+--
 -- Name: tbljournal_id_entry_seq; Type: SEQUENCE SET; Schema: public; Owner: compta
 --
 
@@ -1144,7 +1496,6 @@ SELECT pg_catalog.setval('public.tblndf_detail_frais_line_seq', 1, false);
 SELECT pg_catalog.setval('public.tblndf_vehicule_id_vehicule_seq', 1, false);
 
 
-
 --
 -- Name: tbllocked_month add; Type: CONSTRAINT; Schema: public; Owner: compta
 --
@@ -1167,6 +1518,30 @@ ALTER TABLE ONLY public.compta_client
 
 ALTER TABLE ONLY public.compta_user
     ADD CONSTRAINT compta_user_username_userpass_pk PRIMARY KEY (username, userpass);
+
+
+--
+-- Name: tblbilan_code tblbilan_code_id_client_formulaire_code; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblbilan_code
+    ADD CONSTRAINT tblbilan_code_id_client_formulaire_code PRIMARY KEY (id_client, formulaire, code);
+
+
+--
+-- Name: tblbilan_detail tblbilan_detail_id_client_form_code_mini_maxi_pkey; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblbilan_detail
+    ADD CONSTRAINT tblbilan_detail_id_client_form_code_mini_maxi_pkey PRIMARY KEY (id_client, formulaire, code, compte_mini, compte_maxi);
+
+
+--
+-- Name: tblbilan tblbilan_id_client_form; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblbilan
+    ADD CONSTRAINT tblbilan_id_client_form PRIMARY KEY (id_client, bilan_form);
 
 
 --
@@ -1218,11 +1593,43 @@ ALTER TABLE ONLY public.tbldocuments
 
 
 --
+-- Name: tbldocuments_tags tbldocuments_tags_id_client_tags_nom_tags_doc; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tbldocuments_tags
+    ADD CONSTRAINT tbldocuments_tags_id_client_tags_nom_tags_doc PRIMARY KEY (id_client, tags_nom, tags_doc);
+
+
+--
 -- Name: tblexport tblexport_id_export_id_client_fiscal_year; Type: CONSTRAINT; Schema: public; Owner: compta
 --
 
 ALTER TABLE ONLY public.tblexport
     ADD CONSTRAINT tblexport_id_export_id_client_fiscal_year PRIMARY KEY (id_export, id_client, fiscal_year);
+
+
+--
+-- Name: tblimmobilier tblimmobilier_id_client_immo_contrat_ref; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier
+    ADD CONSTRAINT tblimmobilier_id_client_immo_contrat_ref PRIMARY KEY (id_client, immo_contrat);
+
+
+--
+-- Name: tblimmobilier_locataire tblimmobilier_locataire_id_loc_id_client_ref; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier_locataire
+    ADD CONSTRAINT tblimmobilier_locataire_id_loc_id_client_ref PRIMARY KEY (id_loc, id_client);
+
+
+--
+-- Name: tblimmobilier_logement tblimmobilier_logement_id_client_biens_ref; Type: CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier_logement
+    ADD CONSTRAINT tblimmobilier_logement_id_client_biens_ref PRIMARY KEY (id_client, biens_ref);
 
 
 --
@@ -1239,7 +1646,6 @@ ALTER TABLE ONLY public.tbljournal_liste
 
 ALTER TABLE ONLY public.tbljournal
     ADD CONSTRAINT tbljournal_id_line PRIMARY KEY (id_line);
-
 
 
 --
@@ -1296,7 +1702,6 @@ ALTER TABLE ONLY public.tblndf_vehicule
 
 ALTER TABLE ONLY public.tblndf_vehicule
     ADD CONSTRAINT tblndf_vehicule_id_vehicule_id_client_fiscal_year PRIMARY KEY (id_vehicule, id_client, fiscal_year);
-
 
 
 --
@@ -1385,35 +1790,35 @@ CREATE INDEX tbljournal_id_entry_idx ON public.tbljournal USING btree (id_entry)
 -- Name: tblcerfa_2_detail check_compte_not_in_use; Type: TRIGGER; Schema: public; Owner: compta
 --
 
-CREATE TRIGGER check_compte_not_in_use BEFORE INSERT ON public.tblcerfa_2_detail FOR EACH ROW EXECUTE PROCEDURE public.tblcerfa_2_detail_check_compte_not_in_use();
+CREATE TRIGGER check_compte_not_in_use BEFORE INSERT ON public.tblcerfa_2_detail FOR EACH ROW EXECUTE FUNCTION public.tblcerfa_2_detail_check_compte_not_in_use();
 
 
 --
 -- Name: tbljournal_staging check_fiscal_year_is_a_match; Type: TRIGGER; Schema: public; Owner: compta
 --
 
-CREATE TRIGGER check_fiscal_year_is_a_match BEFORE UPDATE ON public.tbljournal_staging FOR EACH ROW EXECUTE PROCEDURE public.tbljournal_staging_check_fiscal_year();
+CREATE TRIGGER check_fiscal_year_is_a_match BEFORE UPDATE ON public.tbljournal_staging FOR EACH ROW EXECUTE FUNCTION public.tbljournal_staging_check_fiscal_year();
 
 
 --
 -- Name: tbljournal check_month_is_archived; Type: TRIGGER; Schema: public; Owner: compta
 --
 
-CREATE TRIGGER check_month_is_archived BEFORE INSERT OR DELETE ON public.tbljournal FOR EACH ROW EXECUTE PROCEDURE public.tbljournal_check_month_is_archived();
+CREATE TRIGGER check_month_is_archived BEFORE INSERT OR DELETE ON public.tbljournal FOR EACH ROW EXECUTE FUNCTION public.tbljournal_check_month_is_archived();
 
 
 --
 -- Name: tblcerfa_2_detail check_numero_compte_is_a_match; Type: TRIGGER; Schema: public; Owner: compta
 --
 
-CREATE TRIGGER check_numero_compte_is_a_match BEFORE INSERT ON public.tblcerfa_2_detail FOR EACH ROW EXECUTE PROCEDURE public.tblcerfa_2_detail_check_numero_compte();
+CREATE TRIGGER check_numero_compte_is_a_match BEFORE INSERT ON public.tblcerfa_2_detail FOR EACH ROW EXECUTE FUNCTION public.tblcerfa_2_detail_check_numero_compte();
 
 
 --
 -- Name: tbljournal_staging check_numero_compte_is_a_match; Type: TRIGGER; Schema: public; Owner: compta
 --
 
-CREATE TRIGGER check_numero_compte_is_a_match BEFORE UPDATE ON public.tbljournal_staging FOR EACH ROW EXECUTE PROCEDURE public.tbljournal_staging_check_numero_compte();
+CREATE TRIGGER check_numero_compte_is_a_match BEFORE UPDATE ON public.tbljournal_staging FOR EACH ROW EXECUTE FUNCTION public.tbljournal_staging_check_numero_compte();
 
 
 --
@@ -1446,6 +1851,46 @@ ALTER TABLE ONLY public.compta_user
 
 ALTER TABLE ONLY public.compta_user
     ADD CONSTRAINT compta_user_preferred_datestyle_fkey FOREIGN KEY (preferred_datestyle) REFERENCES public.tbldatestyle(id_datestyle);
+
+
+--
+-- Name: tblbilan_code tblbilan_code_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblbilan_code
+    ADD CONSTRAINT tblbilan_code_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblbilan_code tblbilan_code_id_client_formulaire_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblbilan_code
+    ADD CONSTRAINT tblbilan_code_id_client_formulaire_fkey FOREIGN KEY (id_client, formulaire) REFERENCES public.tblbilan(id_client, bilan_form) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: tblbilan_detail tblbilan_detail_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblbilan_detail
+    ADD CONSTRAINT tblbilan_detail_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblbilan_detail tblbilan_detail_id_client_form_code_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblbilan_detail
+    ADD CONSTRAINT tblbilan_detail_id_client_form_code_fkey FOREIGN KEY (id_client, formulaire, code) REFERENCES public.tblbilan_code(id_client, formulaire, code) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: tblbilan tblbilan_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblbilan
+    ADD CONSTRAINT tblbilan_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE;
 
 
 --
@@ -1505,11 +1950,83 @@ ALTER TABLE ONLY public.tbldocuments_categorie
 
 
 --
+-- Name: tbldocuments_tags tbldocuments_tags_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tbldocuments_tags
+    ADD CONSTRAINT tbldocuments_tags_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: tbldocuments_tags tbldocuments_tags_id_client_tags_doc_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tbldocuments_tags
+    ADD CONSTRAINT tbldocuments_tags_id_client_tags_doc_fkey FOREIGN KEY (id_client, tags_doc) REFERENCES public.tbldocuments(id_client, id_name) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: tblexport tblexport_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
 --
 
 ALTER TABLE ONLY public.tblexport
     ADD CONSTRAINT tblexport_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON DELETE CASCADE;
+
+
+--
+-- Name: tblimmobilier tblimmobilier_id_client_biens_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier
+    ADD CONSTRAINT tblimmobilier_id_client_biens_ref_fkey FOREIGN KEY (id_client, immo_logement) REFERENCES public.tblimmobilier_logement(id_client, biens_ref) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblimmobilier tblimmobilier_id_client_fiscal_year_piece_compte_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier
+    ADD CONSTRAINT tblimmobilier_id_client_fiscal_year_piece_compte_fkey FOREIGN KEY (id_client, fiscal_year, immo_compte) REFERENCES public.tblcompte(id_client, fiscal_year, numero_compte) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblimmobilier tblimmobilier_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier
+    ADD CONSTRAINT tblimmobilier_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblimmobilier_locataire tblimmobilier_locataire_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier_locataire
+    ADD CONSTRAINT tblimmobilier_locataire_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblimmobilier_locataire tblimmobilier_locataire_id_client_locataires_contrat_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier_locataire
+    ADD CONSTRAINT tblimmobilier_locataire_id_client_locataires_contrat_fkey FOREIGN KEY (id_client, locataires_contrat) REFERENCES public.tblimmobilier(id_client, immo_contrat) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: tblimmobilier_logement tblimmobilier_logement_id_client_fiscal_year_biens_compte_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier_logement
+    ADD CONSTRAINT tblimmobilier_logement_id_client_fiscal_year_biens_compte_fkey FOREIGN KEY (id_client, fiscal_year, biens_compte) REFERENCES public.tblcompte(id_client, fiscal_year, numero_compte) ON UPDATE CASCADE;
+
+
+--
+-- Name: tblimmobilier_logement tblimmobilier_logement_id_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: compta
+--
+
+ALTER TABLE ONLY public.tblimmobilier_logement
+    ADD CONSTRAINT tblimmobilier_logement_id_client_fkey FOREIGN KEY (id_client) REFERENCES public.compta_client(id_client) ON UPDATE CASCADE;
 
 
 --
