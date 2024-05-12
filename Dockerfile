@@ -18,18 +18,14 @@ locale-gen fr_FR.UTF-8
 # INSTALLATION DES PACKETS
 RUN apt-get update && apt-get install -q -y \
 	openssh-server sudo apache2 \
-	php php-pgsql php-mbstring cpanminus \
+	php php-pgsql php-mbstring swaks \
 	libapache-dbi-perl libapache2-request-perl libpdf-api2-perl \
-	libemail-sender-perl libemail-simple-perl \
 	libdbd-pg-perl libapache-session-perl libmime-tools-perl vim poppler-utils supervisor && \
 	apt-get update && apt-get install -q -y \
 	postgresql && \
 	apt-get clean && \ 
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 	
-# INSTALLATION DE MODULE PERL À L'AIDE DE CPAN
-RUN cpanm Net::OAuth2::Profile::WebServer Email::Sender::Transport::SMTP::TLS
-
 # COPIE DES FICHIERS LOCAUX
 COPY adminer.php ${DOCUMENTROOT}
 COPY compta.conf /etc/apache2/sites-available
