@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -q -y \
 	openssh-server sudo apache2 \
 	php php-pgsql php-mbstring swaks \
 	libapache-dbi-perl libapache2-request-perl libpdf-api2-perl \
-	libdbd-pg-perl libapache-session-perl libmime-tools-perl vim poppler-utils supervisor && \
+	libdbd-pg-perl libapache-session-perl libjson-perl libmime-tools-perl vim poppler-utils supervisor && \
 	apt-get update && apt-get install -q -y \
 	postgresql && \
 	apt-get clean && \ 
@@ -60,6 +60,12 @@ RUN sed -ri 's/ServerTokens OS/ServerTokens Prod/' /etc/apache2/*/security.conf 
 	sudo a2dismod autoindex && \
 	sudo a2dismod status
 EXPOSE 80
+
+# Modifier le fichier ImagePNG.pm avec sed, mais seulement si la modification n'a pas encore été faite
+RUN if ! grep -q 'use parent "Exporter";' /usr/lib/x86_64-linux-gnu/perl5/5.32/PDF/API2/XS/ImagePNG.pm; then \
+    sed -i '/^package PDF::API2::XS::ImagePNG;/a\use parent "Exporter";\nour @EXPORT = qw(split_channels unfilter);' \
+    /usr/lib/x86_64-linux-gnu/perl5/5.32/PDF/API2/XS/ImagePNG.pm; \
+fi
 
 # RÉPERTOIRE DE TRAVAIL
 WORKDIR /var/www/html
