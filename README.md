@@ -26,8 +26,7 @@ La version disponible ici est une version modifiée avec de nouvelles fonctionna
 
 ********************************************************************************************************
 Vous pouvez tester le logiciel sur l'instance de test ci-dessous (username superadmin password: admin) :
-
-http://89.168.38.104/base/
+http://141.145.216.88/base/
 ********************************************************************************************************
 
 ## [Bien démarrer](https://github.com/picsou83/compta.libremen.com/wiki/Home)
