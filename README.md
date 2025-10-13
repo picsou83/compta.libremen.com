@@ -4,84 +4,94 @@
     </a> 
     <br>
     <br>
-    <div style="display: flex;">
-    <a href="https://github.com/picsou83/compta.libremen.com/releases">
-        <img src="https://img.shields.io/github/release/picsou83/compta.libremen.com.svg">
-    </a>
-    <a href="https://hub.docker.com/repository/docker/picsou83/compta-libremen-com">
-        <img src="https://img.shields.io/badge/docker%20image-latest-brightgreen">
-    </a>
-    </div>   
-        <h1>compta.libremen.com</h1>
     <p>
- </div> 
+    <a href="https://github.com/picsou83/compta.libremen.com/stargazers">
+      <img src="https://img.shields.io/github/stars/picsou83/compta.libremen.com?style=social" alt="Stars">
+    </a>
+    <a href="https://github.com/picsou83/compta.libremen.com/issues">
+      <img src="https://img.shields.io/github/issues/picsou83/compta.libremen.com?color=orange" alt="Issues">
+    </a>
+    <a href="https://hub.docker.com/r/picsou83/compta-libremen-com">
+      <img src="https://img.shields.io/docker/pulls/picsou83/compta-libremen-com?label=Docker%20pulls" alt="Docker pulls">
+    </a>
+    <a href="https://github.com/picsou83/compta.libremen.com/releases">
+      <img src="https://img.shields.io/github/v/release/picsou83/compta.libremen.com?color=brightgreen" alt="Latest release">
+    </a>
+    <a href="https://github.com/picsou83/compta.libremen.com/blob/main/LICENSE">
+      <img src="https://img.shields.io/badge/Licence-CeCILL--C-blue" alt="Licence CeCILL-C">
+    </a>
+    </p>
+      <h1>compta.libremen.com</h1>
+  </div> 
 
-**compta.libremen.com** est un logiciel libre et gratuit de comptabilité en partie double permettant d'enregistrer des écritures comptables de façon aisée, rapide et fiable
+ **compta.libremen.com** est un logiciel libre et gratuit de **comptabilité en partie double**, conçu pour simplifier la saisie et le suivi des écritures comptables. 
+Fiable, rapide et intuitif, il permet de gérer toute la comptabilité générale sans dépendre d’un service propriétaire.
 
-Il offre les fonctions de base nécessaires à la génération des documents courants (journal général, plan comptable, grand livre, balance...) et des fonctions d'exportation des données permettant leur traitement par d'autres logiciels du système d'information de l'entreprise (format FEC)
+🧩 Basé sur le projet original de [Vincent Veyron](https://compta.libremen.com/), ce fork indépendant apporte des **améliorations et modules inédits**, avec un **déploiement prêt à l’emploi via Docker** (_Debian + Apache + mod_perl + PostgreSQL_).
 
-La version initiale (1.0) de ce logiciel est disponible sur le site https://compta.libremen.com/ 
+🔗 **Essai immédiat du logiciel** (username: **superadmin** password: **admin**) :  [en cliquant ici](http://141.145.216.88/base/)
 
-La version disponible ici est une **version modifiée** avec de nouvelles fonctionnalités et packagée pour un déploiement rapide via docker. (Debian avec  Apache + Mod_perl + PostgreSQL)
+---
 
-********************************************************************************************************
-Vous pouvez tester le logiciel sur l'instance de test ci-dessous (username superadmin password: admin) :
-http://141.145.216.88/base/
-********************************************************************************************************
+## 🌍 Fonctionnalités clés
 
-## Fork et modifications
+| Catégorie | Fonctionnalités |
+|------------|----------------|
+| 📘 Gestion comptable | Journal général, plan comptable, grand livre, balance, export FEC |
+| 📁 Gestion documentaire | Upload, archivage et association de pièces justificatives |
+| 🔁 Automatisation | Écritures récurrentes, tâches automatiques |
+| 📊 Analyse & reporting | Module Bilan (formules personnalisées), détection d’anomalies comptables |
+| 💼 Notes de frais | Génération automatique d’écritures + impression PDF |
+| 💰 Intérêts CCA | Calculs et écritures automatiques |
+| 🧾 PDF | Impression de la balance et du grand livre |
+| ⚡ Saisie rapide | Recherche et ajout d’écritures simplifiés |
+| 📥 Importation | OCR + import CSV |
+| ✉️ Communication | Module de gestion des emails |
+| 🏠 Immobilier | Gestion des baux, logements et quittances |
+| 🐳 Déploiement | Docker prêt à l’emploi pour Linux / Windows / Cloud |
 
-Ce dépôt contient un **fork** indépendant du logiciel original développé par Vincent Veyron ([site officiel](https://compta.libremen.com/)).  
+> ⚠️ Ce projet **n’est pas affilié** au logiciel original.  
+> Certaines nouveautés du projet officiel peuvent **ne pas être incluses** ici.
 
-Cette version inclut plusieurs **ajouts et améliorations** :
-- Module gestion de documents
-- Module Écritures récurrentes
-- Module Bilan avec gestion des formules de calcul des formulaires
-- Module Notes de frais avec génération des écritures et impression PDF
-- Module Intérêts CCA
-- Documentation intégrée
-- Module Analyses : détection des anomalies comptables
-- Impression PDF de la balance et du grand livre
-- Module Saisie rapide d’écritures
-- Module Recherche d’écritures
-- Module Importation via OCR et fichiers CSV
-- Module Gestion Email
-- Module Gestion immobilière : gestion des baux, des logements et génération des quittances
-- Saisie facile : saisie rapide d’une tâche comptable 
-- Docker et déploiement : pack Docker prêt à l’emploi
+---
 
-**Attention :**  
-- Nous **ne sommes pas associés** au projet original.  
-- Certaines **nouveautés ajoutées dans le logiciel officiel de Vincent Veyron** peuvent **ne pas être présentes** dans ce fork.  
-- Utilisez le Docker fourni avec précaution.
+## 📚 [Wiki et documentation](https://github.com/picsou83/compta.libremen.com/wiki/Home) 
 
-## [Bien démarrer](https://github.com/picsou83/compta.libremen.com/wiki/Home)
-Le [WIKI](https://github.com/picsou83/compta.libremen.com/wiki) vous fournit toutes les informations nécessaires pour être opérationnel!.
+Le Wiki vous fournit toutes les informations nécessaires pour être opérationnel!.
 
-* [Home](https://github.com/picsou83/compta.libremen.com/wiki/Home)
-  * [Installation](https://github.com/picsou83/compta.libremen.com/wiki/Home)
-    * [Cloud => Installation gratuite](https://github.com/picsou83/compta.libremen.com/wiki/Cloud-installation-gratuite)
-    * [Linux => Installation Hub Docker](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-Hub-Docker)
-    * [Linux => Installation Dockerfile](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-Dockerfile)
-    * [Linux => Installation manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-manuelle)
-    * [Windows => Installation via WSL](https://github.com/picsou83/compta.libremen.com/wiki/Windows-installation-WSL)
-  * [Mise à jour](https://github.com/picsou83/compta.libremen.com/wiki/Home)
-    * [Linux => Maj image Docker](https://github.com/picsou83/compta.libremen.com/wiki/Linux-Maj-Docker)
-    * [Linux => Maj manuelle ](https://github.com/picsou83/compta.libremen.com/wiki/Linux-Maj-manuelle)
-    * [Windows => Maj image WSL](https://github.com/picsou83/compta.libremen.com/wiki/Windows-Maj-WSL)
-    * [Windows => Maj manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Windows-Maj-manuelle)
-  * [Configuration](https://github.com/picsou83/compta.libremen.com/wiki/Home)
-* [Identifiants & Tips](https://github.com/picsou83/compta.libremen.com/wiki/Identifiants-&-Tips)
-* [Screenshot](https://github.com/picsou83/compta.libremen.com/wiki/Screenshot)
-* [Roadmap](https://github.com/picsou83/compta.libremen.com/wiki/Roadmap)
+- **Installation**
+  - ☁️ [Cloud — Installation gratuite](https://github.com/picsou83/compta.libremen.com/wiki/Cloud-installation-gratuite)
+  - 🐧 [Linux — Installation via Hub Docker](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-Hub-Docker)
+  - 🧱 [Linux — Installation via Dockerfile](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-Dockerfile)
+  - ⚙️ [Linux — Installation manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Linux-installation-manuelle)
+  - 🪟 [Windows — Installation via WSL](https://github.com/picsou83/compta.libremen.com/wiki/Windows-installation-WSL)
+- **Mise à jour**
+  - 🔄️ [Linux — Mise à jour de l’image Docker](https://github.com/picsou83/compta.libremen.com/wiki/Linux-Maj-Docker)
+  - 🔄️ [Linux — Mise à jour manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Linux-Maj-manuelle)
+  - 🔄️ [Windows — Mise à jour via WSL](https://github.com/picsou83/compta.libremen.com/wiki/Windows-Maj-WSL)
+  - 🔄️ [Windows — Mise à jour manuelle](https://github.com/picsou83/compta.libremen.com/wiki/Windows-Maj-manuelle)
+- **Configuration et ressources**
+  - ⚙️ [Configuration](https://github.com/picsou83/compta.libremen.com/wiki/Home)
+  - 📝 [Identifiants & Tips](https://github.com/picsou83/compta.libremen.com/wiki/Identifiants-&-Tips)
+  - 🖼️ [Screenshots](https://github.com/picsou83/compta.libremen.com/wiki/Screenshot)
+  - 🗺️ [Roadmap](https://github.com/picsou83/compta.libremen.com/wiki/Roadmap)
 
-## Aide et Support
-Si vous avez besoin d'aide, vous pouvez utiliser le [salon de discussions](https://github.com/picsou83/compta.libremen.com/discussions) et pour les bugs vous pouvez utiliser les [issues](https://github.com/picsou83/compta.libremen.com/issues).
+---
 
-## Licence
+## 💬 Aide et support
 
-Ce logiciel est une **version modifiée** d’un logiciel libre initialement développé par Vincent Veyron.  
-Il est distribué sous la **licence CeCILL-C**. Vous pouvez utiliser, modifier et redistribuer ce logiciel conformément aux termes de cette licence.  
-Pour plus d’informations : [http://www.cecill.info](http://www.cecill.info)
+- 💡 Questions générales : [Discussions](https://github.com/picsou83/compta.libremen.com/discussions)  
+- 🐛 Signalement de bugs : [Issues](https://github.com/picsou83/compta.libremen.com/issues)  
 
-**Avertissement :** En accord avec la licence CeCILL-C, ce logiciel est fourni avec une garantie limitée. L’utilisateur assume les risques liés à son utilisation. Ni l’auteur initial, ni le modificateur ne peuvent être tenus responsables de dommages directs ou indirects.
+---
+
+## ⚖️ Licence
+
+Ce logiciel est une **version modifiée** du projet libre initialement développé par Vincent Veyron.  
+Distribué sous la **licence [CeCILL-C](http://www.cecill.info)**.
+
+> ⚠️ En accord avec la licence CeCILL-C, le logiciel est fourni sans garantie.  
+> L’utilisateur assume les risques liés à son utilisation.  
+> Ni l’auteur initial, ni le modificateur ne peuvent être tenus responsables de dommages directs ou indirects.
+
+
