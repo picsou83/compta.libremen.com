@@ -2,7 +2,7 @@
 FROM debian:bullseye-slim
 
 # MÉTADONNÉES DE L'IMAGE
-LABEL version="1.10" maintainer="Picsou83 <picsou83@gmail.com>"
+LABEL version="1.14" maintainer="Picsou83 <picsou83@gmail.com>"
 
 # VARIABLES TEMPORAIRES
 ARG DBNAME="comptalibre"
@@ -14,6 +14,10 @@ echo "LC_ALL=fr_FR.UTF-8" >> /etc/environment && \
 echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \ 
 echo "LANG=fr_FR.UTF-8" > /etc/locale.conf && \ 
 locale-gen fr_FR.UTF-8
+
+# CONFIGURATION DU FUSEAU HORAIRE
+ENV TZ=Europe/Paris
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # INSTALLATION DES PACKETS
 RUN apt-get update && apt-get install -q -y \
