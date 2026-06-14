@@ -30,25 +30,24 @@ Fiable, rapide et intuitif, il permet de gérer toute la comptabilité général
 🧩 Basé sur le projet original de [Vincent Veyron](https://compta.libremen.com/), ce fork indépendant apporte des **améliorations et modules inédits**, avec un **déploiement prêt à l’emploi via Docker** (_Debian + Apache + mod_perl + PostgreSQL_).
 
 🔗 **Essai immédiat du logiciel** (username: **superadmin** password: **admin**) :  [en cliquant ici](http://141.145.216.88/base/)
+> 🔄 *Note : Il s'agit d'un environnement de démonstration public "bac à sable". Les données peuvent être modifiées par les visiteurs et l'instance est réinitialisée périodiquement.*
 
 ---
 
 ## 🌍 Fonctionnalités clés
 
 | Catégorie | Fonctionnalités |
-|------------|----------------|
-| 📘 Gestion comptable | Journal général, plan comptable, grand livre, balance, export FEC |
-| 📁 Gestion documentaire | Upload, archivage et association de pièces justificatives |
-| 🔁 Automatisation | Écritures récurrentes, tâches automatiques |
-| 📊 Analyse & reporting | Module Bilan (formules personnalisées), détection d’anomalies comptables |
-| 💼 Notes de frais | Génération automatique d’écritures + impression PDF |
-| 💰 Intérêts CCA | Calculs et écritures automatiques |
-| 🧾 PDF | Impression de la balance et du grand livre |
-| ⚡ Saisie rapide | Recherche et ajout d’écritures simplifiés |
-| 📥 Importation | OCR + import CSV |
-| ✉️ Communication | Module de gestion des emails |
-| 🏠 Immobilier | Gestion des baux, logements et quittances |
-| 🐳 Déploiement | Docker prêt à l’emploi pour Linux / Windows / Cloud |
+| :--- | :--- |
+| 📘 **Comptabilité Générale** | Journal général, plan comptable, grand livre, balance, export **FEC** |
+| 📊 **Analyse & Clôture** | Module Bilan (formules personnalisées), détection d’anomalies comptables |
+| ⚡ **Saisie & Productivité** | Recherche et ajout d’écritures simplifiés, écritures récurrentes, tâches automatiques |
+| 📥 **Automatisation** | **OCR** + import CSV |
+| 📁 **GED (Documents)** | Upload, archivage et association de pièces justificatives aux écritures |
+| 💼 **Gestion des Frais** | Notes de frais (génération automatique d’écritures + impression PDF) |
+| 💰 **Finances** | Calculs et écritures automatiques des intérêts CCA |
+| 🏠 **Gestion Immobilière** | Gestion des baux, logements et quittances |
+| ✉️ **Outils intégrés** | Module de gestion des emails, impressions PDF (balance et grand livre) |
+| 🐳 **Déploiement** | Docker prêt à l’emploi pour Linux / Windows (WSL) / Cloud |
 
 > ⚠️ Ce projet **n’est pas affilié** au logiciel original.  
 > Certaines nouveautés du projet officiel peuvent **ne pas être incluses** ici.
